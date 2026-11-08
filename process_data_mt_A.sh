@@ -1,0 +1,280 @@
+#!/bin/bash
+#
+# Process data: T1w and MTS only, route A (GBM8360E Lab 4, Exercise 3).
+#
+# Copy of process_data_mt.sh, itself a trimmed copy of spine-generic's process_data.sh
+# (commit 272fa3f). Only the extraction at the end of the MTS section changes.
+# Route A: the maps are computed in the MT space, as in process_data_mt.sh, then
+# warped to the PAM50 template, and the values are extracted there with the template's
+# own atlas and vertebral levels.
+# Results: MTR_A.csv, MTsat_A.csv and T1_A.csv; maps in template space: mtr_A,
+# mtsat_A and t1map_A. Run it with sct_run_batch, in a new output folder:
+#   sct_run_batch -script process_data_mt_A.sh -path-data <data-single-subject> \
+#                 -path-output <output folder> -include-list sub-<site>
+#
+# Usage:
+#   ./process_data.sh <SUBJECT>
+#
+# Manual segmentations or labels should be located under:
+# PATH_DATA/derivatives/labels/SUBJECT/<CONTRAST>/
+#
+# Authors: Julien Cohen-Adad
+
+# The following global variables are retrieved from the caller sct_run_batch
+# but could be overwritten by uncommenting the lines below:
+# PATH_DATA_PROCESSED="~/data_processed"
+# PATH_RESULTS="~/results"
+# PATH_LOG="~/log"
+# PATH_QC="~/qc"
+
+# Uncomment for full verbose
+set -x
+
+# Immediately exit if error
+set -e -o pipefail
+
+# Exit if user presses CTRL+C (Linux) or CMD+C (OSX)
+trap "echo Caught Keyboard Interrupt within script. Exiting now.; exit" INT
+
+# Retrieve input params
+SUBJECT=$1
+
+# get starting time:
+start=`date +%s`
+
+
+# FUNCTIONS
+# ==============================================================================
+
+# If there is an additional b=0 scan, add it to the main DWI data and update the
+# bval and bvec files.
+concatenate_b0_and_dwi(){
+  local file_b0="$1"  # does not have extension
+  local file_dwi="$2"  # does not have extension
+  if [[ -e ${file_b0}.nii.gz ]]; then
+    echo "Found additional b=0 scans: $file_b0.nii.gz They will be concatenated to the DWI scans."
+    sct_dmri_concat_b0_and_dwi -i ${file_b0}.nii.gz ${file_dwi}.nii.gz -bval ${file_dwi}.bval -bvec ${file_dwi}.bvec -order b0 dwi -o ${file_dwi}_concat.nii.gz -obval ${file_dwi}_concat.bval -obvec ${file_dwi}_concat.bvec
+    # Update global variable
+    FILE_DWI="${file_dwi}_concat"
+  else
+    echo "No additional b=0 scans was found."
+    FILE_DWI="${file_dwi}"
+  fi
+}
+
+# Check if manual label already exists. If it does, copy it locally. If it does
+# not, perform labeling.
+label_if_does_not_exist(){
+  local file="$1"
+  local file_seg="$2"
+  # Update global variable with segmentation file name
+  FILELABEL="${file}_label-discs_dlabel" #label-discs_dlabel
+  FILELABELMANUAL="${PATH_DATA}/derivatives/labels/${SUBJECT}/anat/${FILELABEL}.nii.gz"
+  echo "Looking for manual label: $FILELABELMANUAL"
+  if [[ -e $FILELABELMANUAL ]]; then
+    echo "Found! Using manual labels."
+    cp -r $FILELABELMANUAL ${FILELABEL}.nii.gz
+    # Generate labeled segmentation from manual disc labels
+    sct_label_vertebrae -i ${file}.nii.gz -s ${file_seg}.nii.gz -discfile ${FILELABEL}.nii.gz -c t1
+    sct_qc  -i ${file}.nii.gz  -p sct_label_vertebrae -s ${file_seg}_labeled.nii.gz -qc ${PATH_QC} -qc-subject ${SUBJECT}
+  else
+    echo "Not found. Proceeding with automatic labeling."
+    # Generate labeled segmentation
+    sct_label_vertebrae -i ${file}.nii.gz -s ${file_seg}.nii.gz -c t1
+  fi
+  # Create labels in the cord at C3 and C5 mid-vertebral levels
+  sct_label_utils -i ${file_seg}_labeled.nii.gz -vert-body 3,5 -o ${file}_label-vertebrae_desc-C3C5_dlabel.nii.gz
+  FILELABEL="${file}_label-vertebrae_desc-C3C5_dlabel"
+}
+
+# Check if manual segmentation already exists. If it does, copy it locally. If
+# it does not, perform seg.
+segment_if_does_not_exist(){
+  local file="$1"
+  local contrast="$2"
+  # Find contrast
+  if [[ $contrast == "dwi" ]]; then
+    folder_contrast="dwi"
+  else
+    folder_contrast="anat"
+  fi
+  FILESEG="${file}_label-SC_seg"
+  FILESEGMANUAL="${PATH_DATA}/derivatives/labels/${SUBJECT}/${folder_contrast}/${FILESEG}.nii.gz"
+  echo
+  echo "Looking for manual segmentation: $FILESEGMANUAL"
+  if [[ -e $FILESEGMANUAL ]]; then
+    echo "Found! Using manual segmentation."
+    cp -r $FILESEGMANUAL ${FILESEG}.nii.gz
+    sct_qc -i ${file}.nii.gz -s ${FILESEG}.nii.gz -p sct_deepseg_sc -qc ${PATH_QC} -qc-subject ${SUBJECT}
+  else
+    echo "Not found. Proceeding with automatic segmentation."
+    # Segment spinal cord
+    sct_deepseg_sc -i ${file}.nii.gz -c $contrast -qc ${PATH_QC} -qc-subject ${SUBJECT} -o ${FILESEG}.nii.gz
+  fi
+}
+
+# Check if manual segmentation already exists. If it does, copy it locally. If
+# it does not, perform seg.
+segment_gm_if_does_not_exist(){
+  local file="$1"
+  local contrast="$2"
+  # Update global variable with segmentation file name
+  FILESEG="${file}_label-GM_seg"
+  FILESEGMANUAL="${PATH_DATA}/derivatives/labels/${SUBJECT}/anat/${FILESEG}.nii.gz"
+  echo "Looking for manual segmentation: $FILESEGMANUAL"
+  if [[ -e $FILESEGMANUAL ]]; then
+    echo "Found! Using manual segmentation."
+    cp -r $FILESEGMANUAL ${FILESEG}.nii.gz
+    sct_qc -i ${file}.nii.gz -s ${FILESEG}.nii.gz -p sct_deepseg_gm -qc ${PATH_QC} -qc-subject ${SUBJECT}
+  else
+    echo "Not found. Proceeding with automatic segmentation."
+    # Segment spinal cord
+    sct_deepseg_gm -i ${file}.nii.gz -qc ${PATH_QC} -qc-subject ${SUBJECT} -o ${FILESEG}.nii.gz
+  fi
+}
+
+
+
+# SCRIPT STARTS HERE
+# ==============================================================================
+# Display useful info for the log, such as SCT version, RAM and CPU cores available
+sct_check_dependencies -short
+
+# Go to folder where data will be copied and processed
+cd $PATH_DATA_PROCESSED
+# Copy list of participants in processed data folder
+if [[ ! -f "participants.tsv" ]]; then
+  cp -r $PATH_DATA/participants.tsv .
+fi
+# Copy list of participants in results folder (used by spine-generic scripts)
+if [[ ! -f $PATH_RESULTS/"participants.tsv" ]]; then
+  cp -r $PATH_DATA/participants.tsv $PATH_RESULTS/"participants.tsv"
+fi
+# Copy source images
+cp -r $PATH_DATA/$SUBJECT .
+# Go to anat folder where all structural data are located
+cd ${SUBJECT}/anat/
+
+
+# T1w
+# ------------------------------------------------------------------------------
+file_t1="${SUBJECT}_T1w"
+# Reorient to RPI and resample to 1mm iso (supposed to be the effective resolution)
+sct_image -i ${file_t1}.nii.gz -setorient RPI -o ${file_t1}_RPI.nii.gz
+sct_resample -i ${file_t1}_RPI.nii.gz -mm 1x1x1 -o ${file_t1}_RPI_r.nii.gz
+# Rename
+mv "${file_t1}.nii.gz" "${file_t1}_native.nii.gz"
+mv "${file_t1}_RPI_r.nii.gz" "${file_t1}.nii.gz"
+# Segment spinal cord (only if it does not exist)
+segment_if_does_not_exist $file_t1 "t1"
+file_t1_seg=$FILESEG
+# Create mid-vertebral levels in the cord (only if it does not exist)
+label_if_does_not_exist ${file_t1} ${file_t1_seg} $file_t1
+file_label=$FILELABEL
+# Register to PAM50 template
+sct_register_to_template -i ${file_t1}.nii.gz -s ${file_t1_seg}.nii.gz -l ${file_label}.nii.gz -c t1 -param step=1,type=seg,algo=centermassrot:step=2,type=seg,algo=syn,slicewise=1,smooth=0,iter=5:step=3,type=im,algo=syn,slicewise=1,smooth=0,iter=3 -qc ${PATH_QC} -qc-subject ${SUBJECT}
+# Rename warping fields for clarity
+mv warp_template2anat.nii.gz warp_template2T1w.nii.gz
+mv warp_anat2template.nii.gz warp_T1w2template.nii.gz
+# Warp template without the white matter atlas (we don't need it at this point)
+sct_warp_template -d ${file_t1}.nii.gz -w warp_template2T1w.nii.gz -a 0 -ofolder label_T1w
+# Generate QC report to assess vertebral labeling
+sct_qc -i ${file_t1}.nii.gz -s label_T1w/template/PAM50_levels.nii.gz -p sct_label_vertebrae -qc ${PATH_QC} -qc-subject ${SUBJECT}
+# Flatten scan along R-L direction (to make nice figures)
+sct_flatten_sagittal -i ${file_t1}.nii.gz -s ${file_t1_seg}.nii.gz
+# Compute average cord CSA between C2 and C3
+sct_process_segmentation -i ${file_t1_seg}.nii.gz -vert 2:3 -vertfile label_T1w/template/PAM50_levels.nii.gz -o ${PATH_RESULTS}/csa-SC_T1w.csv -append 1
+# Compute average cord CSA between C3 and C4
+sct_process_segmentation -i ${file_t1_seg}.nii.gz -vert 3:4 -vertfile label_T1w/template/PAM50_levels.nii.gz -o ${PATH_RESULTS}/csa-SC_T1w_c34.csv -append 1
+
+# MTS
+# ------------------------------------------------------------------------------
+file_t1w="${SUBJECT}_flip-2_mt-off_MTS"
+file_mton="${SUBJECT}_flip-1_mt-on_MTS"
+file_mtoff="${SUBJECT}_flip-1_mt-off_MTS"
+
+if [[ -e "${file_t1w}.nii.gz" && -e "${file_mton}.nii.gz" && -e "${file_mtoff}.nii.gz" ]]; then
+  
+  # Reorient to RPI:
+  # Reorient to RPI
+  sct_image -i ${file_t1w}.nii.gz -setorient RPI -o ${file_t1w}_RPI.nii.gz
+  sct_image -i ${file_mton}.nii.gz -setorient RPI -o ${file_mton}_RPI.nii.gz
+  sct_image -i ${file_mtoff}.nii.gz -setorient RPI -o ${file_mtoff}_RPI.nii.gz
+  
+  # Rename _RPI 
+  mv ${file_t1w}.nii.gz ${file_t1w}_native.nii.gz
+  mv ${file_t1w}_RPI.nii.gz ${file_t1w}.nii.gz
+  mv ${file_mton}.nii.gz ${file_mton}_native.nii.gz
+  mv ${file_mton}_RPI.nii.gz ${file_mton}.nii.gz
+  mv ${file_mtoff}.nii.gz ${file_mtoff}_native.nii.gz
+  mv ${file_mtoff}_RPI.nii.gz ${file_mtoff}.nii.gz
+
+  # Segment spinal cord (only if it does not exist)
+  segment_if_does_not_exist $file_t1w "t1"
+  file_t1w_seg=$FILESEG
+  # Create mask
+  sct_create_mask -i ${file_t1w}.nii.gz -p centerline,${file_t1w_seg}.nii.gz -size 35mm -o ${file_t1w}_mask.nii.gz
+  # Crop data for faster processing
+  sct_crop_image -i ${file_t1w}.nii.gz -m ${file_t1w}_mask.nii.gz -o ${file_t1w}_crop.nii.gz
+  file_t1w="${file_t1w}_crop"
+  # Register PD->T1w
+  # Tips: here we only use rigid transformation because both images have very similar sequence parameters. We don't want to use SyN/BSplineSyN to avoid introducing spurious deformations.
+  sct_register_multimodal -i ${file_mtoff}.nii.gz -d ${file_t1w}.nii.gz -dseg ${file_t1w_seg}.nii.gz -param step=1,type=im,algo=rigid,slicewise=1,metric=CC -x spline -qc ${PATH_QC} -qc-subject ${SUBJECT}
+  file_mtoff="${file_mtoff}_reg"
+  # Register MT->T1w
+  sct_register_multimodal -i ${file_mton}.nii.gz -d ${file_t1w}.nii.gz -dseg ${file_t1w_seg}.nii.gz -param step=1,type=im,algo=rigid,slicewise=1,metric=CC -x spline -qc ${PATH_QC} -qc-subject ${SUBJECT}
+  file_mton="${file_mton}_reg"
+  # Copy json files to match file basename (it will later be used by sct_compute_mtsat)
+  cp ${SUBJECT}_flip-2_mt-off_MTS.json ${file_t1w}.json
+  cp ${SUBJECT}_flip-1_mt-off_MTS.json ${file_mtoff}.json
+  cp ${SUBJECT}_flip-1_mt-on_MTS.json ${file_mton}.json
+  # Register template->T1w_ax (using template-T1w as initial transformation)
+  sct_register_multimodal -i $SCT_DIR/data/PAM50/template/PAM50_t1.nii.gz -iseg $SCT_DIR/data/PAM50/template/PAM50_cord.nii.gz -d ${file_t1w}.nii.gz -dseg ${file_t1w_seg}.nii.gz -param step=1,type=seg,algo=slicereg,metric=MeanSquares,smooth=2:step=2,type=im,algo=syn,metric=CC,iter=5,gradStep=0.5 -initwarp warp_template2T1w.nii.gz -initwarpinv warp_T1w2template.nii.gz
+  # Rename warping field for clarity
+  mv warp_PAM50_t12${file_t1w}.nii.gz warp_template2axT1w.nii.gz
+  mv warp_${file_t1w}2PAM50_t1.nii.gz warp_axT1w2template.nii.gz
+  # Warp template
+  sct_warp_template -d ${file_t1w}.nii.gz -w warp_template2axT1w.nii.gz -ofolder label_axT1w -qc ${PATH_QC} -qc-subject ${SUBJECT}
+  # Compute MTR
+  sct_compute_mtr -mt0 ${file_mtoff}.nii.gz -mt1 ${file_mton}.nii.gz
+  # Compute MTsat
+  sct_compute_mtsat -mt ${file_mton}.nii.gz -pd ${file_mtoff}.nii.gz -t1 ${file_t1w}.nii.gz
+  # Route A: warp the maps to the PAM50 template
+  sct_apply_transfo -i mtr.nii.gz -d $SCT_DIR/data/PAM50/template/PAM50_t1.nii.gz -w warp_axT1w2template.nii.gz -x spline -o mtr_A.nii.gz
+  sct_apply_transfo -i mtsat.nii.gz -d $SCT_DIR/data/PAM50/template/PAM50_t1.nii.gz -w warp_axT1w2template.nii.gz -x spline -o mtsat_A.nii.gz
+  sct_apply_transfo -i t1map.nii.gz -d $SCT_DIR/data/PAM50/template/PAM50_t1.nii.gz -w warp_axT1w2template.nii.gz -x spline -o t1map_A.nii.gz
+  # Extract MTR, MTsat and T1 in WM between C2 and C5 vertebral levels, with the template's own atlas
+  sct_extract_metric -i mtr_A.nii.gz -f $SCT_DIR/data/PAM50/atlas -l 51 -vert 2:5 -vertfile $SCT_DIR/data/PAM50/template/PAM50_levels.nii.gz -o ${PATH_RESULTS}/MTR_A.csv -append 1
+  sct_extract_metric -i mtsat_A.nii.gz -f $SCT_DIR/data/PAM50/atlas -l 51 -vert 2:5 -vertfile $SCT_DIR/data/PAM50/template/PAM50_levels.nii.gz -o ${PATH_RESULTS}/MTsat_A.csv -append 1
+  sct_extract_metric -i t1map_A.nii.gz -f $SCT_DIR/data/PAM50/atlas -l 51 -vert 2:5 -vertfile $SCT_DIR/data/PAM50/template/PAM50_levels.nii.gz -o ${PATH_RESULTS}/T1_A.csv -append 1
+else
+  echo "WARNING: MTS dataset is incomplete."
+fi
+
+# Go back to parent folder
+cd ..
+
+# Verify presence of output files and write log file if error
+# ------------------------------------------------------------------------------
+FILES_TO_CHECK=(
+  "anat/${SUBJECT}_T1w_label-SC_seg.nii.gz"
+  "anat/label_axT1w/template/PAM50_levels.nii.gz"
+  "anat/mtr_A.nii.gz"
+  "anat/mtsat_A.nii.gz"
+  "anat/t1map_A.nii.gz"
+)
+for file in ${FILES_TO_CHECK[@]}; do
+  if [[ ! -e $file ]]; then
+    echo "${SUBJECT}/${file} does not exist" >> $PATH_LOG/_error_check_output_files.log
+  fi
+done
+
+# Display useful info for the log
+end=`date +%s`
+runtime=$((end-start))
+echo
+echo "~~~"
+echo "SCT version: `sct_version`"
+echo "Ran on:      `uname -nsr`"
+echo "Duration:    $(($runtime / 3600))hrs $((($runtime / 60) % 60))min $(($runtime % 60))sec"
+echo "~~~"

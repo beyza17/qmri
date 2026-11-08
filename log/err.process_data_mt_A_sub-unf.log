@@ -1,0 +1,8 @@
++ set -e -o pipefail
++ trap 'echo Caught Keyboard Interrupt within script. Exiting now.; exit' INT
++ SUBJECT=sub-unf
+++ date +%s
++ start=1793909441
++ sct_check_dependencies -short
+E:\phd\courses\qmri\output_N\process_data_mt_A.sh: line 141: sct_check_dependencies: command not found
+Error: Processing of subject sub-unf failed

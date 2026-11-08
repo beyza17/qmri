@@ -1,0 +1,16 @@
+{
+ "path": "E:\\phd\\courses\\qmri\\output_N\\data_processed\\sub-unf\\anat",
+ "cmdline": "sct_deepseg_sc -i sub-unf_T1w.nii.gz -c t1 -qc 'E:\\phd\\courses\\qmri\\output_N\\qc' -qc-subject sub-unf -o sub-unf_T1w_label-SC_seg.nii.gz",
+ "command": "sct_deepseg_sc",
+ "sctVersion": "7.3",
+ "dataset": "data_processed",
+ "subject": "sub-unf",
+ "contrast": "anat",
+ "inputFile": "sub-unf_T1w.nii.gz",
+ "plane": "Axial",
+ "backgroundImage": "data_processed\\sub-unf\\anat\\sct_deepseg_sc\\2026_11_05_211357.765346\\background_img.png",
+ "overlayImage": "data_processed\\sub-unf\\anat\\sct_deepseg_sc\\2026_11_05_211357.765346\\overlay_img.png",
+ "date": "2026-11-05 21:13:57.765346",
+ "rank": "",
+ "qc": ""
+}

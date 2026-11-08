@@ -1,0 +1,16 @@
+{
+ "path": "E:\\phd\\courses\\qmri\\output_N\\data_processed\\sub-unf\\anat",
+ "cmdline": "sct_register_to_template -i sub-unf_T1w.nii.gz -s sub-unf_T1w_label-SC_seg.nii.gz -l sub-unf_T1w_label-vertebrae_desc-C3C5_dlabel.nii.gz -c t1 -param step=1,type=seg,algo=centermassrot:step=2,type=seg,algo=syn,slicewise=1,smooth=0,iter=5:step=3,type=im,algo=syn,slicewise=1,smooth=0,iter=3 -qc 'E:\\phd\\courses\\qmri\\output_N\\qc' -qc-subject sub-unf",
+ "command": "sct_register_to_template",
+ "sctVersion": "7.3",
+ "dataset": "data_processed",
+ "subject": "sub-unf",
+ "contrast": "anat",
+ "inputFile": "sub-unf_T1w.nii.gz",
+ "plane": "Axial",
+ "backgroundImage": "data_processed\\sub-unf\\anat\\sct_register_to_template\\2026_11_04_233335.940795\\background_img.png",
+ "overlayImage": "data_processed\\sub-unf\\anat\\sct_register_to_template\\2026_11_04_233335.940795\\overlay_img.png",
+ "date": "2026-11-04 23:33:35.940795",
+ "rank": "",
+ "qc": ""
+}

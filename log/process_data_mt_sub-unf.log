@@ -1,0 +1,1520 @@
++ set -e -o pipefail
++ trap 'echo Caught Keyboard Interrupt within script. Exiting now.; exit' INT
++ SUBJECT=sub-unf
+++ date +%s
++ start=1793831113
++ sct_check_dependencies -short
+
+--
+Spinal Cord Toolbox (7.3)
+
+sct_check_dependencies -short
+--
+
+
+SYSTEM INFORMATION
+------------------
+SCT info:
+- version: 7.3
+- path: C:\Users\beyza\sct_7.3
+OS: windows (Windows-10-10.0.26200-SP0)
+CPU cores: Available: 8, Used by ITK functions: 1
+RAM: Total: 16225MB, Used: 12843MB, Available: 3381MB
+[0mTotal runtime; 0.054 seconds.[0m
++ cd 'E:\phd\courses\qmri\output_N\data_processed'
++ [[ ! -f participants.tsv ]]
++ cp -r 'E:\phd\courses\qmri\data-single-subject/participants.tsv' .
++ [[ ! -f E:\phd\courses\qmri\output_N\results/participants.tsv ]]
++ cp -r 'E:\phd\courses\qmri\data-single-subject/participants.tsv' 'E:\phd\courses\qmri\output_N\results/participants.tsv'
++ cp -r 'E:\phd\courses\qmri\data-single-subject/sub-unf' .
++ cd sub-unf/anat/
++ file_t1=sub-unf_T1w
++ sct_image -i sub-unf_T1w.nii.gz -setorient RPI -o sub-unf_T1w_RPI.nii.gz
+
+--
+Spinal Cord Toolbox (7.3)
+
+sct_image -i sub-unf_T1w.nii.gz -setorient RPI -o sub-unf_T1w_RPI.nii.gz
+--
+
+E:\phd\courses\qmri\output_N\data_processed\sub-unf\anat\sub-unf_T1w.nii.gz
+Generate output files...
+[0mTotal runtime; 1.195 seconds.[0m
++ sct_resample -i sub-unf_T1w_RPI.nii.gz -mm 1x1x1 -o sub-unf_T1w_RPI_r.nii.gz
+
+--
+Spinal Cord Toolbox (7.3)
+
+sct_resample -i sub-unf_T1w_RPI.nii.gz -mm 1x1x1 -o sub-unf_T1w_RPI_r.nii.gz
+--
+
+[0mload data...[0m
+[0mTotal runtime; 4.375 seconds.[0m
++ mv sub-unf_T1w.nii.gz sub-unf_T1w_native.nii.gz
++ mv sub-unf_T1w_RPI_r.nii.gz sub-unf_T1w.nii.gz
++ segment_if_does_not_exist sub-unf_T1w t1
++ local file=sub-unf_T1w
++ local contrast=t1
++ [[ t1 == dwi ]]
++ folder_contrast=anat
++ FILESEG=sub-unf_T1w_label-SC_seg
++ FILESEGMANUAL='E:\phd\courses\qmri\data-single-subject/derivatives/labels/sub-unf/anat/sub-unf_T1w_label-SC_seg.nii.gz'
++ echo
+
++ echo 'Looking for manual segmentation: E:\phd\courses\qmri\data-single-subject/derivatives/labels/sub-unf/anat/sub-unf_T1w_label-SC_seg.nii.gz'
+Looking for manual segmentation: E:\phd\courses\qmri\data-single-subject/derivatives/labels/sub-unf/anat/sub-unf_T1w_label-SC_seg.nii.gz
++ [[ -e E:\phd\courses\qmri\data-single-subject/derivatives/labels/sub-unf/anat/sub-unf_T1w_label-SC_seg.nii.gz ]]
++ echo 'Not found. Proceeding with automatic segmentation.'
+Not found. Proceeding with automatic segmentation.
++ sct_deepseg_sc -i sub-unf_T1w.nii.gz -c t1 -qc 'E:\phd\courses\qmri\output_N\qc' -qc-subject sub-unf -o sub-unf_T1w_label-SC_seg.nii.gz
+
+--
+Spinal Cord Toolbox (7.3)
+
+sct_deepseg_sc -i sub-unf_T1w.nii.gz -c t1 -qc E:\phd\courses\qmri\output_N\qc -qc-subject sub-unf -o sub-unf_T1w_label-SC_seg.nii.gz
+--
+
+C:\Users\beyza\sct_7.3\spinalcordtoolbox\scripts\sct_deepseg_sc.py:112: DeprecationWarning: [31m[1m`sct_deepseg_sc` is deprecated, and will be removed in a future version of SCT. Please use `sct_deepseg spinalcord` instead.[0m
+  warn(stylize(
+[0mConfig deepseg_sc:[0m
+[0m  Centerline algorithm: svm[0m
+[0m  Brain in image: True[0m
+[0m  Kernel dimension: 2d[0m
+[0m  Contrast: t1[0m
+[0m  Threshold: 0.15[0m
+[0mReorient the image to RPI, if necessary...[0m
+[0mFinding the spinal cord centerline...[0m
+[0mRemove temporary files...[0m
+rm -rf C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-25-47_optic-detect-centerline_c10hnm0_
+[0mCropping the image around the spinal cord...[0m
+[0mNormalizing the intensity...[0m
+[0mSegmenting the spinal cord using deep learning on 2D patches...[0m
+[0mReassembling the image...[0m
+[0mResampling the segmentation to the native image resolution using linear interpolation...[0m
+[0mBinarizing the resampled segmentation...[0m
+[93m[1mRemoving small objects above slice #229[0m
+[93m[1mFound isolated voxels on slice 0, Removing them[0m
+[0mRemove temporary files...[0m
+rm -rf C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-25-32_deepseg-sc_18f2ty7w
+[0mResampling image "sub-unf_T1w.nii.gz" to 0.6x0.6 mm[0m
+[0mResampling image "sub-unf_T1w_label-SC_seg.nii.gz" to 0.6x0.6 mm[0m
+[0mCompute center of mass at each slice[0m
+C:\Users\beyza\sct_7.3\python\envs\venv_sct\lib\site-packages\scipy\ndimage\_measurements.py:1548: RuntimeWarning: invalid value encountered in scalar divide
+  results = [sum_labels(input * grids[dir].astype(float), labels, index) / normalizer
+[0m
+*** Generating Quality Control (QC) html report ***[0m
+[0mE:\phd\courses\qmri\output_N\qc\data_processed\sub-unf\anat\sct_deepseg_sc\2026_11_04_232636.926611\background_img.png[0m
+[0mSuccessfully generated the QC results in E:\phd\courses\qmri\output_N\qc\_json\qc_2026_11_04_232636.926611.json[0m
+
+To see the results in a browser, type:
+start E:\phd\courses\qmri\output_N\qc\index.html
+
+[0mTotal runtime; 70.483 seconds.[0m
++ file_t1_seg=sub-unf_T1w_label-SC_seg
++ label_if_does_not_exist sub-unf_T1w sub-unf_T1w_label-SC_seg sub-unf_T1w
++ local file=sub-unf_T1w
++ local file_seg=sub-unf_T1w_label-SC_seg
++ FILELABEL=sub-unf_T1w_label-discs_dlabel
++ FILELABELMANUAL='E:\phd\courses\qmri\data-single-subject/derivatives/labels/sub-unf/anat/sub-unf_T1w_label-discs_dlabel.nii.gz'
++ echo 'Looking for manual label: E:\phd\courses\qmri\data-single-subject/derivatives/labels/sub-unf/anat/sub-unf_T1w_label-discs_dlabel.nii.gz'
+Looking for manual label: E:\phd\courses\qmri\data-single-subject/derivatives/labels/sub-unf/anat/sub-unf_T1w_label-discs_dlabel.nii.gz
++ [[ -e E:\phd\courses\qmri\data-single-subject/derivatives/labels/sub-unf/anat/sub-unf_T1w_label-discs_dlabel.nii.gz ]]
++ echo 'Not found. Proceeding with automatic labeling.'
+Not found. Proceeding with automatic labeling.
++ sct_label_vertebrae -i sub-unf_T1w.nii.gz -s sub-unf_T1w_label-SC_seg.nii.gz -c t1
+
+--
+Spinal Cord Toolbox (7.3)
+
+sct_label_vertebrae -i sub-unf_T1w.nii.gz -s sub-unf_T1w_label-SC_seg.nii.gz -c t1
+--
+
+
+Copying input data to tmp folder...
+
+Straighten spinal cord...
+[0mCopy files to tmp folder...[0m
+[0mFitting centerline using B-spline approximation[0m
+[0m   - Difference between fitted NURBS curve and input data = 11.07 mm[0m
+[0m   - Difference between fitted NURBS curve and input data = 1.21 mm[0m
+[0m   - Difference between fitted NURBS curve and input data = 1.10 mm[0m
+[0m   - Difference between fitted NURBS curve and input data = 0.35 mm[0m
+[0m   - Difference between fitted NURBS curve and input data = 0.15 mm[0m
+[0m   - Difference between fitted NURBS curve and input data = 0.09 mm[0m
+[0m   - Difference between fitted NURBS curve and input data = 0.07 mm[0m
+[0m   - Difference between fitted NURBS curve and input data = 0.05 mm[0m
+[0m   - Difference between fitted NURBS curve and input data = 0.05 mm[0m
+[0m   - Difference between fitted NURBS curve and input data = 0.05 mm[0m
+[0m   - Optimization finished! (Change delta <= 0.01 with improvements over 3 straight iterations.)[0m
+[0mCreate the straight space and the safe zone[0m
+[0mLength of spinal cord: 241.8546802775158[0m
+[0mSize of spinal cord in z direction: 228.0[0m
+[0mRatio length/size: 1.0607661415680518[0m
+[0mSafe zone boundaries (curved space): [-151.02755737304688, 76.97244262695312][0m
+[0mStart/end points (straight space): [-157.9548975118048, 83.89978276571104][0m
+[0mPad input volume to account for spinal cord length...[0m
+[0mTime to generate centerline: 68.0 ms[0m
+[0mSafe zone boundaries (straight space): [-162.02755737304688, 79.97244262695312][0m
+[0mWarping field generated: tmp.curve2straight.nii.gz[0m
+[0mWarping field generated: tmp.straight2curve.nii.gz[0m
+[0mApply transformation to input image...[0m
+[93m[1mFile tmp.anat_rigid_warp.nii.gz already exists. Will overwrite it.[0m
+[0mGenerate output files...[0m
+mv C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-26-42_straighten-spinalcord_4qyfrp4_\tmp.curve2straight.nii.gz .\warp_curve2straight.nii.gz
+[0mFile created: .\warp_curve2straight.nii.gz[0m
+mv C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-26-42_straighten-spinalcord_4qyfrp4_\tmp.straight2curve.nii.gz .\warp_straight2curve.nii.gz
+[0mFile created: .\warp_straight2curve.nii.gz[0m
+cp C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-26-42_straighten-spinalcord_4qyfrp4_\tmp.anat_rigid_warp.nii.gz .\straight_ref.nii.gz
+[0mFile created: .\data_straight.nii[0m
+[0mRemove temporary files...[0m
+rm -rf C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-26-42_straighten-spinalcord_4qyfrp4_
+
+Resample to 0.5mm isotropic...
+[0mload data...[0m
+
+Apply straightening to segmentation...
+[93m[1mFile segmentation_straight.nii already exists. Will overwrite it.[0m
+[93m[1mFile C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-26-42_label-vertebrae_k9oxfr05\segmentation_straight.nii already exists. Will overwrite it.[0m
+
+Create label to identify disc...
+[0mCreating temporary folder...[0m
+[0mRun C2-C3 detector...[0m
+[0mC2-C3 detected...[0m
+[0mRemove temporary files...[0m
+
+And apply straightening to label...
+[93m[1mFile labelz_straight.nii.gz already exists. Will overwrite it.[0m
+
+Get z and disc values from straight label...
+.. [382, 3]
+[0mLook for template...[0m
+[0mPath template: C:\Users\beyza\sct_7.3\data\PAM50[0m
+[0mOpen template and vertebral levels...[0m
+[0mDisc values from template: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19][0m
+[0mZ-values for each disc: [984, 938, 907, 870, 833, 800, 769, 735, 692, 646, 600, 551, 500, 449, 396, 342, 289, 231, 168, 105, 39][0m
+[0mDistances between discs (in voxel): [46.0, 31.0, 37.0, 37.0, 33.0, 31.0, 34.0, 43.0, 46.0, 46.0, 49.0, 51.0, 51.0, 53.0, 54.0, 53.0, 58.0, 63.0, 63.0, 66.0][0m
+[0mDetect intervertebral discs...[0m
+[0mCurrent disc: 2 (z=382). Direction: superior[0m
+[0m.. Peak found: z=-2 (correlation = 0.7361137097363781)[0m
+[0mCurrent disc: 1 (z=411). Direction: superior[0m
+[0m.. correcting factor: 1.0[0m
+[0m.. Switching to inferior direction.[0m
+[0mCurrent disc: 3 (z=345). Direction: inferior[0m
+[0m.. Peak found: z=0 (correlation = 0.7678708569134605)[0m
+[0m.. correcting factor: 0.972972972972973[0m
+[0mCurrent disc: 4 (z=309). Direction: inferior[0m
+[0m.. Peak found: z=0 (correlation = 0.7287979001964453)[0m
+[0m.. correcting factor: 0.9729729729729731[0m
+[0mCurrent disc: 5 (z=277). Direction: inferior[0m
+[0m.. Peak found: z=1 (correlation = 0.7437238691221032)[0m
+[0m.. correcting factor: 0.9645782145782147[0m
+[0mCurrent disc: 6 (z=248). Direction: inferior[0m
+[0m.. Peak found: z=3 (correlation = 0.6300566143627048)[0m
+[0m.. correcting factor: 0.9458561200496686[0m
+[0mCurrent disc: 7 (z=219). Direction: inferior[0m
+[0m.. Peak found: z=6 (correlation = 0.6853981636633562)[0m
+[0m.. correcting factor: 0.9156644137668807[0m
+[0mCurrent disc: 8 (z=186). Direction: inferior[0m
+[0m.. Peak found: z=4 (correlation = 0.7239122829585551)[0m
+[0m.. correcting factor: 0.9011342815676252[0m
+[0mCurrent disc: 9 (z=149). Direction: inferior[0m
+[0m.. Peak found: z=0 (correlation = 0.7990868429590172)[0m
+[0m.. correcting factor: 0.8999055398499329[0m
+[0mCurrent disc: 10 (z=108). Direction: inferior[0m
+[0m.. Peak found: z=-5 (correlation = 0.6624336182807969)[0m
+[0m.. correcting factor: 0.9110271465332738[0m
+[0mCurrent disc: 11 (z=58). Direction: inferior[0m
+[0m.. Peak found: z=-2 (correlation = 0.8088832079293148)[0m
+[0m.. correcting factor: 0.9158427992268852[0m
+[0mCurrent disc: 12 (z=9). Direction: inferior[0m
+[0m.. Peak found: z=-1 (correlation = 0.4072211588930781)[0m
+[0m.. correcting factor: 0.9181458602597352[0m
+[0mAdding top disc based on adjusted template distance: #0[0m
+[0m.. approximate distance: 42[0m
+
+Un-straighten labeling...
+[93m[1mFile segmentation_labeled.nii already exists. Will overwrite it.[0m
+
+Label discs...
+
+Un-straighten labeled discs...
+[93m[1mFile segmentation_labeled_disc.nii already exists. Will overwrite it.[0m
+
+Cleaning labeled segmentation:
+  removing labeled voxels outside segmentation...
+Done cleaning.
+[93m[1mFile C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-26-42_label-vertebrae_k9oxfr05\segmentation_labeled.nii already exists. Will overwrite it.[0m
+
+Generate output files...
+[0mFile created: E:\phd\courses\qmri\output_N\data_processed\sub-unf\anat\sub-unf_T1w_label-SC_seg_labeled.nii.gz[0m
+[0mFile created: E:\phd\courses\qmri\output_N\data_processed\sub-unf\anat\sub-unf_T1w_label-SC_seg_labeled_discs.nii.gz[0m
+mv C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-26-42_label-vertebrae_k9oxfr05\straightening.cache E:\phd\courses\qmri\output_N\data_processed\sub-unf\anat\straightening.cache
+[0mFile created: E:\phd\courses\qmri\output_N\data_processed\sub-unf\anat\straightening.cache[0m
+mv C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-26-42_label-vertebrae_k9oxfr05\warp_curve2straight.nii.gz E:\phd\courses\qmri\output_N\data_processed\sub-unf\anat\warp_curve2straight.nii.gz
+[0mFile created: E:\phd\courses\qmri\output_N\data_processed\sub-unf\anat\warp_curve2straight.nii.gz[0m
+mv C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-26-42_label-vertebrae_k9oxfr05\warp_straight2curve.nii.gz E:\phd\courses\qmri\output_N\data_processed\sub-unf\anat\warp_straight2curve.nii.gz
+[0mFile created: E:\phd\courses\qmri\output_N\data_processed\sub-unf\anat\warp_straight2curve.nii.gz[0m
+mv C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-26-42_label-vertebrae_k9oxfr05\straight_ref.nii.gz E:\phd\courses\qmri\output_N\data_processed\sub-unf\anat\straight_ref.nii.gz
+[0mFile created: E:\phd\courses\qmri\output_N\data_processed\sub-unf\anat\straight_ref.nii.gz[0m
+
+Remove temporary files...
+rm -rf C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-26-42_label-vertebrae_k9oxfr05
+[0mTotal runtime; 120.071 seconds.[0m
++ sct_label_utils -i sub-unf_T1w_label-SC_seg_labeled.nii.gz -vert-body 3,5 -o sub-unf_T1w_label-vertebrae_desc-C3C5_dlabel.nii.gz
+
+--
+Spinal Cord Toolbox (7.3)
+
+sct_label_utils -i sub-unf_T1w_label-SC_seg_labeled.nii.gz -vert-body 3,5 -o sub-unf_T1w_label-vertebrae_desc-C3C5_dlabel.nii.gz
+--
+
+Generating output files...
+[0mTotal runtime; 1.372 seconds.[0m
++ FILELABEL=sub-unf_T1w_label-vertebrae_desc-C3C5_dlabel
++ file_label=sub-unf_T1w_label-vertebrae_desc-C3C5_dlabel
++ sct_register_to_template -i sub-unf_T1w.nii.gz -s sub-unf_T1w_label-SC_seg.nii.gz -l sub-unf_T1w_label-vertebrae_desc-C3C5_dlabel.nii.gz -c t1 -param step=1,type=seg,algo=centermassrot:step=2,type=seg,algo=syn,slicewise=1,smooth=0,iter=5:step=3,type=im,algo=syn,slicewise=1,smooth=0,iter=3 -qc 'E:\phd\courses\qmri\output_N\qc' -qc-subject sub-unf
+
+--
+Spinal Cord Toolbox (7.3)
+
+sct_register_to_template -i sub-unf_T1w.nii.gz -s sub-unf_T1w_label-SC_seg.nii.gz -l sub-unf_T1w_label-vertebrae_desc-C3C5_dlabel.nii.gz -c t1 -param step=1,type=seg,algo=centermassrot:step=2,type=seg,algo=syn,slicewise=1,smooth=0,iter=5:step=3,type=im,algo=syn,slicewise=1,smooth=0,iter=3 -qc E:\phd\courses\qmri\output_N\qc -qc-subject sub-unf
+--
+
+
+Check template files...
+  OK: C:\Users\beyza\sct_7.3\data\PAM50\template\PAM50_t1.nii.gz
+  OK: C:\Users\beyza\sct_7.3\data\PAM50\template\PAM50_levels.nii.gz
+  OK: C:\Users\beyza\sct_7.3\data\PAM50\template\PAM50_cord.nii.gz
+
+Check parameters:
+  Data:                 sub-unf_T1w.nii.gz
+  Landmarks:            sub-unf_T1w_label-vertebrae_desc-C3C5_dlabel.nii.gz
+  Segmentation:         sub-unf_T1w_label-SC_seg.nii.gz
+  Path template:        C:\Users\beyza\sct_7.3\data\PAM50
+  Remove temp files:    1
+
+Check input labels...
+
+Copying input data to tmp folder and convert to nii...
+
+Generate labels from template vertebral labeling
+
+Check if provided labels are available in the template
+
+Binarize segmentation
+
+Change orientation of input images to RPI...
+
+Resample data to 1mm isotropic...
+[0mload data...[0m
+[0mload data...[0m
+[93m[1mTo avoid intensity overflow due to convertion to +uint8+, intensity will be rescaled to the maximum quantization scale[0m
+
+Straighten the spinal cord using centerline/segmentation...
+[0mCopy files to tmp folder...[0m
+[0mCreate the straight space and the safe zone[0m
+[0mLength of spinal cord: 241.72227477538945[0m
+[0mSize of spinal cord in z direction: 228.0[0m
+[0mRatio length/size: 1.0601854156815327[0m
+[0mSafe zone boundaries (curved space): [-151.02755737304688, 76.97244262695312][0m
+[0mStart/end points (straight space): [-157.8886947607416, 83.83358001464785][0m
+[0mPad input volume to account for spinal cord length...[0m
+[0mTime to generate centerline: 49.0 ms[0m
+[0mSafe zone boundaries (straight space): [-162.02755737304688, 79.97244262695312][0m
+[0mWarping field generated: tmp.curve2straight.nii.gz[0m
+[0mWarping field generated: tmp.straight2curve.nii.gz[0m
+[0mApply transformation to input image...[0m
+[93m[1mFile tmp.anat_rigid_warp.nii.gz already exists. Will overwrite it.[0m
+[0mGenerate output files...[0m
+mv C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-29-03_straighten-spinalcord__o0h_bci\tmp.curve2straight.nii.gz .\warp_curve2straight.nii.gz
+[0mFile created: .\warp_curve2straight.nii.gz[0m
+mv C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-29-03_straighten-spinalcord__o0h_bci\tmp.straight2curve.nii.gz .\warp_straight2curve.nii.gz
+[0mFile created: .\warp_straight2curve.nii.gz[0m
+cp C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-29-03_straighten-spinalcord__o0h_bci\tmp.anat_rigid_warp.nii.gz .\straight_ref.nii.gz
+mv C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-29-03_straighten-spinalcord__o0h_bci\tmp.anat_rigid_warp.nii.gz C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-28-48_register-to-template_4be471k6\seg_bin_rpi_1mm_crop_straight.nii.gz
+[0mFile created: C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-28-48_register-to-template_4be471k6\seg_bin_rpi_1mm_crop_straight.nii.gz[0m
+[0mRemove temporary files...[0m
+rm -rf C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-29-03_straighten-spinalcord__o0h_bci
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 3 warp_straight2curve.nii.gz -R 'C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-28-48_register-to-template_4be471k6\data_rpi_1mm.nii' warp_straight2curve.nii.gz # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-28-48_register-to-template_4be471k6
+
+Remove unused label on template. Keep only label present in the input label image...
+[93m[1mFile template_label_body.nii.gz already exists. Will overwrite it.[0m
+
+Apply straightening to labels...
+[93m[1mFile C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-28-48_register-to-template_4be471k6\label_projected_rpi_1mm_straight.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-28-48_register-to-template_4be471k6\label_projected_rpi_1mm_straight.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-28-48_register-to-template_4be471k6\template_label_body.nii.gz already exists. Will overwrite it.[0m
+
+Estimate transformation for step #0...
+[0mLabels src: [[5.4827728271484375, -9.968994140625, 17.972442626953125], [5.4827728271484375, -9.968994140625, -15.027557373046875], [10.482772827148438, -9.968994140625, 17.972442626953125]][0m
+[0mLabels dest: [[-0.0, 45.720001220703125, -117.34002685546875], [-0.0, 45.720001220703125, -153.34002685546875], [5.0, 45.720001220703125, -117.34002685546875]][0m
+[0mDegrees of freedom (dof): Tx_Ty_Tz_Rx_Ry_Rz_Sz[0m
+Optimization terminated successfully.
+         Current function value: 0.000000
+         Iterations: 5
+         Function evaluations: 488
+[0mMatrix:
+ [[ 1.00000000e+00  4.95958327e-16 -2.14897708e-16]
+ [-4.95958327e-16  1.00000000e+00  1.30626705e-16]
+ [ 2.14897708e-16 -1.30626705e-16  1.00000000e+00]][0m
+[0mCenter:
+ [   1.66666667   45.72000122 -129.34002686][0m
+[0mTranslation:
+ [[  5.48277283 -55.68899536 136.31246948]][0m
+
+Concatenate transformations: curve --> straight --> affine...
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 3 warp_curve2straightAffine.nii.gz -R template.nii straight2templateAffine.txt warp_curve2straight.nii.gz # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-28-48_register-to-template_4be471k6
+
+Apply transformation...
+[93m[1mFile C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-28-48_register-to-template_4be471k6\data_rpi_1mm_straightAffine.nii already exists. Will overwrite it.[0m
+[93m[1mFile C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-28-48_register-to-template_4be471k6\seg_bin_rpi_1mm_crop_straightAffine.nii.gz already exists. Will overwrite it.[0m
+
+Crop data in template space (for faster processing)...
+
+Sub-sample in z-direction (for faster processing)...
+[0mload data...[0m
+[0mload data...[0m
+[0mload data...[0m
+[0mload data...[0m
+
+Register straight spinal cord to template...
+
+Copying input data to tmp folder and convert to nii...
+
+--
+ESTIMATE TRANSFORMATION FOR STEP #1
+Registration parameters:
+  type ........... seg
+  algo ........... centermassrot
+  slicewise ...... 0
+  metric ......... MeanSquares
+  samplStrategy .. None
+  samplPercent ... 0.2
+  iter ........... 10
+  smooth ......... 0
+  laplacian ...... 0
+  shrink ......... 1
+  gradStep ....... 0.5
+  deformation .... 1x1x0
+  init ........... 
+  poly ........... 5
+  filter_size .... 5
+  dof ............ Tx_Ty_Tz_Rx_Ry_Rz
+  smoothWarpXY ... 2
+  rot_method ..... pca
+[0m
+Copy input data to temp folder...[0m
+[0m
+Get image dimensions of destination image...[0m
+[0m  matrix size: 141 x 141 x 123[0m
+[0m  voxel size: 0.5mm x 0.5mm x 2.0mm[0m
+[0m
+Split input segmentation...[0m
+[0m
+Split destination segmentation...[0m
+
+[0m
+Generate warping field...[0m
+[0m --> step1Warp.nii.gz[0m
+[0m
+Generate warping field...[0m
+[0m --> step1InverseWarp.nii.gz[0m
+[0m
+Move warping fields...[0m
+[0mcp step1Warp.nii.gz C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-30-52_register-wrapper_bf4hpl6e[0m
+[0mcp step1InverseWarp.nii.gz C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-30-52_register-wrapper_bf4hpl6e[0m
+[0mrm -rf C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-30-52_register-slicewise_lfs8ylva[0m
+
+--
+ESTIMATE TRANSFORMATION FOR STEP #2
+
+Apply transformation from previous step
+[93m[1mFile src_seg_reg.nii already exists. Will overwrite it.[0m
+Registration parameters:
+  type ........... seg
+  algo ........... syn
+  slicewise ...... 1
+  metric ......... MeanSquares
+  samplStrategy .. None
+  samplPercent ... 0.2
+  iter ........... 5
+  smooth ......... 0
+  laplacian ...... 0
+  shrink ......... 1
+  gradStep ....... 0.5
+  deformation .... 1x1x0
+  init ........... 
+  poly ........... 5
+  filter_size .... 5
+  dof ............ Tx_Ty_Tz_Rx_Ry_Rz
+  smoothWarpXY ... 2
+  rot_method ..... pca
+[0m
+Copy input data to temp folder...[0m
+[0m
+Get image dimensions of destination image...[0m
+[0m  matrix size: 141 x 141 x 123[0m
+[0m  voxel size: 0.5mm x 0.5mm x 123mm[0m
+[0m
+Split input volume...[0m
+[0m
+Split destination volume...[0m
+
+[0m
+Merge warping fields along z...[0m
+[0m
+Move warping fields...[0m
+[0mcp step2Warp.nii.gz C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-30-52_register-wrapper_bf4hpl6e[0m
+[0mcp step2InverseWarp.nii.gz C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-30-52_register-wrapper_bf4hpl6e[0m
+[0mrm -rf C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-31-07_register-slicewise_rhfbsl1m[0m
+
+--
+ESTIMATE TRANSFORMATION FOR STEP #3
+
+Apply transformation from previous step
+[93m[1mFile src_reg.nii already exists. Will overwrite it.[0m
+Registration parameters:
+  type ........... im
+  algo ........... syn
+  slicewise ...... 1
+  metric ......... MeanSquares
+  samplStrategy .. None
+  samplPercent ... 0.2
+  iter ........... 3
+  smooth ......... 0
+  laplacian ...... 0
+  shrink ......... 1
+  gradStep ....... 0.5
+  deformation .... 1x1x0
+  init ........... 
+  poly ........... 5
+  filter_size .... 5
+  dof ............ Tx_Ty_Tz_Rx_Ry_Rz
+  smoothWarpXY ... 2
+  rot_method ..... pca
+[0m
+Copy input data to temp folder...[0m
+[0m
+Get image dimensions of destination image...[0m
+[0m  matrix size: 141 x 141 x 123[0m
+[0m  voxel size: 0.5mm x 0.5mm x 123mm[0m
+[0m
+Split input volume...[0m
+[0m
+Split destination volume...[0m
+
+[0m
+Merge warping fields along z...[0m
+[0m
+Move warping fields...[0m
+[0mcp step3Warp.nii.gz C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-30-52_register-wrapper_bf4hpl6e[0m
+[0mcp step3InverseWarp.nii.gz C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-30-52_register-wrapper_bf4hpl6e[0m
+[0mrm -rf C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-31-57_register-slicewise_l2qldbzm[0m
+
+Concatenate transformations...
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 3 warp_src2dest.nii.gz -R dest.nii warp_forward_3.nii.gz warp_forward_2.nii.gz warp_forward_1.nii.gz # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-30-52_register-wrapper_bf4hpl6e
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 3 warp_dest2src.nii.gz -R src.nii warp_inverse_1.nii.gz warp_inverse_2.nii.gz warp_inverse_3.nii.gz # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-30-52_register-wrapper_bf4hpl6e
+
+Apply transfo source --> dest...
+[93m[1mFile src_reg.nii already exists. Will overwrite it.[0m
+
+Apply transfo dest --> source...
+[93m[1mFile dest_reg.nii already exists. Will overwrite it.[0m
+
+Generate output files...
+mv C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-30-52_register-wrapper_bf4hpl6e\src_reg.nii data_rpi_1mm_straightAffine_crop_sub_reg.nii
+[0mFile created: data_rpi_1mm_straightAffine_crop_sub_reg.nii[0m
+mv C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-30-52_register-wrapper_bf4hpl6e\warp_src2dest.nii.gz warp_data_rpi_1mm_straightAffine_crop_sub2template_crop_sub.nii.gz
+[0mFile created: warp_data_rpi_1mm_straightAffine_crop_sub2template_crop_sub.nii.gz[0m
+mv C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-30-52_register-wrapper_bf4hpl6e\dest_reg.nii template_crop_sub_reg.nii
+[0mFile created: template_crop_sub_reg.nii[0m
+mv C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-30-52_register-wrapper_bf4hpl6e\warp_dest2src.nii.gz warp_template_crop_sub2data_rpi_1mm_straightAffine_crop_sub.nii.gz
+[0mFile created: warp_template_crop_sub2data_rpi_1mm_straightAffine_crop_sub.nii.gz[0m
+
+Remove temporary files...
+rm -rf C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-30-52_register-wrapper_bf4hpl6e
+
+Concatenate transformations: anat --> template...
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 3 warp_anat2template.nii.gz -R template.nii warp_data_rpi_1mm_straightAffine_crop_sub2template_crop_sub.nii.gz warp_curve2straightAffine.nii.gz # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-28-48_register-to-template_4be471k6
+
+Concatenate transformations: template --> anat...
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 3 warp_template2anat.nii.gz -R data.nii warp_straight2curve.nii.gz -i straight2templateAffine.txt warp_template_crop_sub2data_rpi_1mm_straightAffine_crop_sub.nii.gz # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-28-48_register-to-template_4be471k6
+output_image_filename: warp_template2anat.nii.gz
+reference_image_filename: data.nii
+[0/3]: FIELD: warp_straight2curve.nii.gz
+[1/3]: AFFINE-INV: straight2templateAffine.txt
+[2/3]: FIELD: warp_template_crop_sub2data_rpi_1mm_straightAffine_crop_sub.nii.gz
+output size: [192, 260, 320]
+output spacing: [1, 1, 1]
+output extension is: .gz
+[93m[1mFile template2anat.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile anat2template.nii.gz already exists. Will overwrite it.[0m
+
+Generate output files...
+mv C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-28-48_register-to-template_4be471k6\warp_template2anat.nii.gz warp_template2anat.nii.gz
+[0mFile created: warp_template2anat.nii.gz[0m
+mv C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-28-48_register-to-template_4be471k6\warp_anat2template.nii.gz warp_anat2template.nii.gz
+[0mFile created: warp_anat2template.nii.gz[0m
+mv C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-28-48_register-to-template_4be471k6\template2anat.nii.gz template2anat.nii.gz
+[0mFile created: template2anat.nii.gz[0m
+mv C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-28-48_register-to-template_4be471k6\anat2template.nii.gz anat2template.nii.gz
+[0mFile created: anat2template.nii.gz[0m
+[93m[1mFile straightening.cache already exists. Deleting it..[0m
+mv C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-28-48_register-to-template_4be471k6\straightening.cache straightening.cache
+[0mFile created: straightening.cache[0m
+[93m[1mFile warp_curve2straight.nii.gz already exists. Deleting it..[0m
+mv C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-28-48_register-to-template_4be471k6\warp_curve2straight.nii.gz warp_curve2straight.nii.gz
+[0mFile created: warp_curve2straight.nii.gz[0m
+[93m[1mFile warp_straight2curve.nii.gz already exists. Deleting it..[0m
+mv C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-28-48_register-to-template_4be471k6\warp_straight2curve.nii.gz warp_straight2curve.nii.gz
+[0mFile created: warp_straight2curve.nii.gz[0m
+[93m[1mFile straight_ref.nii.gz already exists. Deleting it..[0m
+mv C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-28-48_register-to-template_4be471k6\straight_ref.nii.gz straight_ref.nii.gz
+[0mFile created: straight_ref.nii.gz[0m
+
+Delete temporary files...
+rm -rf C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-28-48_register-to-template_4be471k6
+
+Finished! Elapsed time: 288s
+[0m
+*** Generating Quality Control (QC) html report ***[0m
+C:\Users\beyza\sct_7.3\python\envs\venv_sct\lib\site-packages\scipy\ndimage\_measurements.py:1548: RuntimeWarning: invalid value encountered in scalar divide
+  results = [sum_labels(input * grids[dir].astype(float), labels, index) / normalizer
+[0mSuccessfully generated the QC results in E:\phd\courses\qmri\output_N\qc\_json\qc_2026_11_04_233335.940795.json[0m
+
+To see the results in a browser, type:
+start E:\phd\courses\qmri\output_N\qc\index.html
+
+[0mTotal runtime; 297.876 seconds.[0m
++ mv warp_template2anat.nii.gz warp_template2T1w.nii.gz
++ mv warp_anat2template.nii.gz warp_T1w2template.nii.gz
++ sct_warp_template -d sub-unf_T1w.nii.gz -w warp_template2T1w.nii.gz -a 0 -ofolder label_T1w
+
+--
+Spinal Cord Toolbox (7.3)
+
+sct_warp_template -d sub-unf_T1w.nii.gz -w warp_template2T1w.nii.gz -a 0 -ofolder label_T1w
+--
+
+
+Check parameters:
+  Working directory ........ E:\phd\courses\qmri\output_N\data_processed\sub-unf\anat
+  Destination image ........ sub-unf_T1w.nii.gz
+  Warping field ............ warp_template2T1w.nii.gz
+  Path template ............ C:\Users\beyza\sct_7.3\data\PAM50
+  Output folder ............ label_T1w
+
+
+WARP TEMPLATE:
+[93m[1mFile label_T1w\template\PAM50_t1.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_T1w\template\PAM50_t2.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_T1w\template\PAM50_t2s.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_T1w\template\PAM50_cord.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_T1w\template\PAM50_wm.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_T1w\template\PAM50_gm.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_T1w\template\PAM50_csf.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_T1w\template\PAM50_levels.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_T1w\template\PAM50_levels_continuous.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_T1w\template\PAM50_label_body.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_T1w\template\PAM50_label_disc.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_T1w\template\PAM50_label_discPosterior.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_T1w\template\PAM50_spine.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_T1w\template\PAM50_centerline.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_T1w\template\PAM50_spinal_midpoint.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_T1w\template\PAM50_spinal_levels.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_T1w\template\PAM50_rootlets.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_T1w\template\PAM50_rootlets_midpoint.nii.gz already exists. Will overwrite it.[0m
+cp C:\Users\beyza\sct_7.3\data\PAM50\template\info_label.txt label_T1w\template
+[0mTotal runtime; 101.140 seconds.[0m
++ sct_qc -i sub-unf_T1w.nii.gz -s label_T1w/template/PAM50_levels.nii.gz -p sct_label_vertebrae -qc 'E:\phd\courses\qmri\output_N\qc' -qc-subject sub-unf
+
+--
+Spinal Cord Toolbox (7.3)
+
+sct_qc -i sub-unf_T1w.nii.gz -s label_T1w/template/PAM50_levels.nii.gz -p sct_label_vertebrae -qc E:\phd\courses\qmri\output_N\qc -qc-subject sub-unf
+--
+
+[0m
+*** Generating Quality Control (QC) html report ***[0m
+C:\Users\beyza\sct_7.3\python\envs\venv_sct\lib\site-packages\scipy\ndimage\_measurements.py:1548: RuntimeWarning: invalid value encountered in scalar divide
+  results = [sum_labels(input * grids[dir].astype(float), labels, index) / normalizer
+[0mSuccessfully generated the QC results in E:\phd\courses\qmri\output_N\qc\_json\qc_2026_11_04_233529.786905.json[0m
+
+To see the results in a browser, type:
+start E:\phd\courses\qmri\output_N\qc\index.html
+
+[0mTotal runtime; 3.552 seconds.[0m
++ sct_flatten_sagittal -i sub-unf_T1w.nii.gz -s sub-unf_T1w_label-SC_seg.nii.gz
+
+--
+Spinal Cord Toolbox (7.3)
+
+sct_flatten_sagittal -i sub-unf_T1w.nii.gz -s sub-unf_T1w_label-SC_seg.nii.gz
+--
+
+[0mTotal runtime; 5.195 seconds.[0m
++ sct_process_segmentation -i sub-unf_T1w_label-SC_seg.nii.gz -vert 2:3 -vertfile label_T1w/template/PAM50_levels.nii.gz -o 'E:\phd\courses\qmri\output_N\results/csa-SC_T1w.csv' -append 1
+
+--
+Spinal Cord Toolbox (7.3)
+
+sct_process_segmentation -i sub-unf_T1w_label-SC_seg.nii.gz -vert 2:3 -vertfile label_T1w/template/PAM50_levels.nii.gz -o E:\phd\courses\qmri\output_N\results/csa-SC_T1w.csv -append 1
+--
+
+C:\Users\beyza\sct_7.3\spinalcordtoolbox\scripts\sct_process_segmentation.py:459: DeprecationWarning: [31m[1m`-vertfile flag` is deprecated, and will be removed in a future version of SCT. Please use `-discfile` instead (single-voxel labels identifying the intervertebral discs).[0m
+  warn(
+
+Done! To view results, type:
+start E:\phd\courses\qmri\output_N\results\csa-SC_T1w.csv
+
+[0mTotal runtime; 9.285 seconds.[0m
++ sct_process_segmentation -i sub-unf_T1w_label-SC_seg.nii.gz -vert 3:4 -vertfile label_T1w/template/PAM50_levels.nii.gz -o 'E:\phd\courses\qmri\output_N\results/csa-SC_T1w_c34.csv' -append 1
+
+--
+Spinal Cord Toolbox (7.3)
+
+sct_process_segmentation -i sub-unf_T1w_label-SC_seg.nii.gz -vert 3:4 -vertfile label_T1w/template/PAM50_levels.nii.gz -o E:\phd\courses\qmri\output_N\results/csa-SC_T1w_c34.csv -append 1
+--
+
+C:\Users\beyza\sct_7.3\spinalcordtoolbox\scripts\sct_process_segmentation.py:459: DeprecationWarning: [31m[1m`-vertfile flag` is deprecated, and will be removed in a future version of SCT. Please use `-discfile` instead (single-voxel labels identifying the intervertebral discs).[0m
+  warn(
+
+Done! To view results, type:
+start E:\phd\courses\qmri\output_N\results\csa-SC_T1w_c34.csv
+
+[0mTotal runtime; 9.074 seconds.[0m
++ file_t1w=sub-unf_flip-2_mt-off_MTS
++ file_mton=sub-unf_flip-1_mt-on_MTS
++ file_mtoff=sub-unf_flip-1_mt-off_MTS
++ [[ -e sub-unf_flip-2_mt-off_MTS.nii.gz ]]
++ [[ -e sub-unf_flip-1_mt-on_MTS.nii.gz ]]
++ [[ -e sub-unf_flip-1_mt-off_MTS.nii.gz ]]
++ sct_image -i sub-unf_flip-2_mt-off_MTS.nii.gz -setorient RPI -o sub-unf_flip-2_mt-off_MTS_RPI.nii.gz
+
+--
+Spinal Cord Toolbox (7.3)
+
+sct_image -i sub-unf_flip-2_mt-off_MTS.nii.gz -setorient RPI -o sub-unf_flip-2_mt-off_MTS_RPI.nii.gz
+--
+
+E:\phd\courses\qmri\output_N\data_processed\sub-unf\anat\sub-unf_flip-2_mt-off_MTS.nii.gz
+Generate output files...
+[0mTotal runtime; 0.379 seconds.[0m
++ sct_image -i sub-unf_flip-1_mt-on_MTS.nii.gz -setorient RPI -o sub-unf_flip-1_mt-on_MTS_RPI.nii.gz
+
+--
+Spinal Cord Toolbox (7.3)
+
+sct_image -i sub-unf_flip-1_mt-on_MTS.nii.gz -setorient RPI -o sub-unf_flip-1_mt-on_MTS_RPI.nii.gz
+--
+
+E:\phd\courses\qmri\output_N\data_processed\sub-unf\anat\sub-unf_flip-1_mt-on_MTS.nii.gz
+Generate output files...
+[0mTotal runtime; 0.374 seconds.[0m
++ sct_image -i sub-unf_flip-1_mt-off_MTS.nii.gz -setorient RPI -o sub-unf_flip-1_mt-off_MTS_RPI.nii.gz
+
+--
+Spinal Cord Toolbox (7.3)
+
+sct_image -i sub-unf_flip-1_mt-off_MTS.nii.gz -setorient RPI -o sub-unf_flip-1_mt-off_MTS_RPI.nii.gz
+--
+
+E:\phd\courses\qmri\output_N\data_processed\sub-unf\anat\sub-unf_flip-1_mt-off_MTS.nii.gz
+Generate output files...
+[0mTotal runtime; 0.371 seconds.[0m
++ mv sub-unf_flip-2_mt-off_MTS.nii.gz sub-unf_flip-2_mt-off_MTS_native.nii.gz
++ mv sub-unf_flip-2_mt-off_MTS_RPI.nii.gz sub-unf_flip-2_mt-off_MTS.nii.gz
++ mv sub-unf_flip-1_mt-on_MTS.nii.gz sub-unf_flip-1_mt-on_MTS_native.nii.gz
++ mv sub-unf_flip-1_mt-on_MTS_RPI.nii.gz sub-unf_flip-1_mt-on_MTS.nii.gz
++ mv sub-unf_flip-1_mt-off_MTS.nii.gz sub-unf_flip-1_mt-off_MTS_native.nii.gz
++ mv sub-unf_flip-1_mt-off_MTS_RPI.nii.gz sub-unf_flip-1_mt-off_MTS.nii.gz
++ segment_if_does_not_exist sub-unf_flip-2_mt-off_MTS t1
++ local file=sub-unf_flip-2_mt-off_MTS
++ local contrast=t1
++ [[ t1 == dwi ]]
++ folder_contrast=anat
++ FILESEG=sub-unf_flip-2_mt-off_MTS_label-SC_seg
++ FILESEGMANUAL='E:\phd\courses\qmri\data-single-subject/derivatives/labels/sub-unf/anat/sub-unf_flip-2_mt-off_MTS_label-SC_seg.nii.gz'
++ echo
+
++ echo 'Looking for manual segmentation: E:\phd\courses\qmri\data-single-subject/derivatives/labels/sub-unf/anat/sub-unf_flip-2_mt-off_MTS_label-SC_seg.nii.gz'
+Looking for manual segmentation: E:\phd\courses\qmri\data-single-subject/derivatives/labels/sub-unf/anat/sub-unf_flip-2_mt-off_MTS_label-SC_seg.nii.gz
++ [[ -e E:\phd\courses\qmri\data-single-subject/derivatives/labels/sub-unf/anat/sub-unf_flip-2_mt-off_MTS_label-SC_seg.nii.gz ]]
++ echo 'Not found. Proceeding with automatic segmentation.'
+Not found. Proceeding with automatic segmentation.
++ sct_deepseg_sc -i sub-unf_flip-2_mt-off_MTS.nii.gz -c t1 -qc 'E:\phd\courses\qmri\output_N\qc' -qc-subject sub-unf -o sub-unf_flip-2_mt-off_MTS_label-SC_seg.nii.gz
+
+--
+Spinal Cord Toolbox (7.3)
+
+sct_deepseg_sc -i sub-unf_flip-2_mt-off_MTS.nii.gz -c t1 -qc E:\phd\courses\qmri\output_N\qc -qc-subject sub-unf -o sub-unf_flip-2_mt-off_MTS_label-SC_seg.nii.gz
+--
+
+C:\Users\beyza\sct_7.3\spinalcordtoolbox\scripts\sct_deepseg_sc.py:112: DeprecationWarning: [31m[1m`sct_deepseg_sc` is deprecated, and will be removed in a future version of SCT. Please use `sct_deepseg spinalcord` instead.[0m
+  warn(stylize(
+[0mConfig deepseg_sc:[0m
+[0m  Centerline algorithm: svm[0m
+[0m  Brain in image: True[0m
+[0m  Kernel dimension: 2d[0m
+[0m  Contrast: t1[0m
+[0m  Threshold: 0.15[0m
+[0mReorient the image to RPI, if necessary...[0m
+[0mFinding the spinal cord centerline...[0m
+[0mRemove temporary files...[0m
+rm -rf C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-12_optic-detect-centerline_4xhbj_ho
+[0mCropping the image around the spinal cord...[0m
+[0mNormalizing the intensity...[0m
+[0mSegmenting the spinal cord using deep learning on 2D patches...[0m
+[0mReassembling the image...[0m
+[0mResampling the segmentation to the native image resolution using linear interpolation...[0m
+[0mBinarizing the resampled segmentation...[0m
+[93m[1mRemoving small objects above slice #19[0m
+[93m[1mFound isolated voxels on slice 1, Removing them[0m
+[93m[1mFound isolated voxels on slice 1, Removing them[0m
+[0mRemove temporary files...[0m
+rm -rf C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-12_deepseg-sc__rzdzaja
+[0mResampling image "sub-unf_flip-2_mt-off_MTS.nii.gz" to 0.6x0.6 mm[0m
+[0mResampling image "sub-unf_flip-2_mt-off_MTS_label-SC_seg.nii.gz" to 0.6x0.6 mm[0m
+[0mCompute center of mass at each slice[0m
+C:\Users\beyza\sct_7.3\python\envs\venv_sct\lib\site-packages\scipy\ndimage\_measurements.py:1548: RuntimeWarning: invalid value encountered in scalar divide
+  results = [sum_labels(input * grids[dir].astype(float), labels, index) / normalizer
+[0m
+*** Generating Quality Control (QC) html report ***[0m
+[0mE:\phd\courses\qmri\output_N\qc\data_processed\sub-unf\anat\sct_deepseg_sc\2026_11_04_233616.602067\background_img.png[0m
+[0mSuccessfully generated the QC results in E:\phd\courses\qmri\output_N\qc\_json\qc_2026_11_04_233616.602067.json[0m
+
+To see the results in a browser, type:
+start E:\phd\courses\qmri\output_N\qc\index.html
+
+[0mTotal runtime; 8.447 seconds.[0m
++ file_t1w_seg=sub-unf_flip-2_mt-off_MTS_label-SC_seg
++ sct_create_mask -i sub-unf_flip-2_mt-off_MTS.nii.gz -p centerline,sub-unf_flip-2_mt-off_MTS_label-SC_seg.nii.gz -size 35mm -o sub-unf_flip-2_mt-off_MTS_mask.nii.gz
+
+--
+Spinal Cord Toolbox (7.3)
+
+sct_create_mask -i sub-unf_flip-2_mt-off_MTS.nii.gz -p centerline,sub-unf_flip-2_mt-off_MTS_label-SC_seg.nii.gz -size 35mm -o sub-unf_flip-2_mt-off_MTS_mask.nii.gz
+--
+
+  OK: sub-unf_flip-2_mt-off_MTS_label-SC_seg.nii.gz
+
+Orientation:
+  RPI
+
+Dimensions:
+(256, 256, 22, 1, 0.8984375, 0.8984375, 5.000002, 1)
+
+Create mask...
+[93m[1mConcatenating images with different datatypes: [dtype('uint8'), dtype('int32')]. Using dtype int32.[0m
+
+Remove temporary files...
+rm -rf C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-18_create-mask_x7xfqji8
+[0mTotal runtime; 0.481 seconds.[0m
++ sct_crop_image -i sub-unf_flip-2_mt-off_MTS.nii.gz -m sub-unf_flip-2_mt-off_MTS_mask.nii.gz -o sub-unf_flip-2_mt-off_MTS_crop.nii.gz
+
+--
+Spinal Cord Toolbox (7.3)
+
+sct_crop_image -i sub-unf_flip-2_mt-off_MTS.nii.gz -m sub-unf_flip-2_mt-off_MTS_mask.nii.gz -o sub-unf_flip-2_mt-off_MTS_crop.nii.gz
+--
+
+[0mBounding box: x=[113, 155], y=[100, 143], z=[2, 19][0m
+[0mCropping the image...[0m
+[0mTotal runtime; 0.346 seconds.[0m
++ file_t1w=sub-unf_flip-2_mt-off_MTS_crop
++ sct_register_multimodal -i sub-unf_flip-1_mt-off_MTS.nii.gz -d sub-unf_flip-2_mt-off_MTS_crop.nii.gz -dseg sub-unf_flip-2_mt-off_MTS_label-SC_seg.nii.gz -param step=1,type=im,algo=rigid,slicewise=1,metric=CC -x spline -qc 'E:\phd\courses\qmri\output_N\qc' -qc-subject sub-unf
+
+--
+Spinal Cord Toolbox (7.3)
+
+sct_register_multimodal -i sub-unf_flip-1_mt-off_MTS.nii.gz -d sub-unf_flip-2_mt-off_MTS_crop.nii.gz -dseg sub-unf_flip-2_mt-off_MTS_label-SC_seg.nii.gz -param step=1,type=im,algo=rigid,slicewise=1,metric=CC -x spline -qc E:\phd\courses\qmri\output_N\qc -qc-subject sub-unf
+--
+
+
+Input parameters:
+  Source .............. sub-unf_flip-1_mt-off_MTS.nii.gz (256, 256, 22)
+  Destination ......... sub-unf_flip-2_mt-off_MTS_crop.nii.gz (42, 43, 17)
+  Init transfo ........ 
+  Mask ................ 
+  Output name ......... 
+  Remove temp files ... 1
+  Verbose ............. 1
+
+Check if input data are 3D...
+
+Copying input data to tmp folder and convert to nii...
+
+--
+ESTIMATE TRANSFORMATION FOR STEP #0
+Registration parameters:
+  type ........... im
+  algo ........... syn
+  slicewise ...... 0
+  metric ......... MI
+  samplStrategy .. None
+  samplPercent ... 0.2
+  iter ........... 0
+  smooth ......... 0
+  laplacian ...... 0
+  shrink ......... 1
+  gradStep ....... 0.5
+  deformation .... 1x1x0
+  init ........... 
+  poly ........... 5
+  filter_size .... 5
+  dof ............ Tx_Ty_Tz_Rx_Ry_Rz
+  smoothWarpXY ... 2
+  rot_method ..... pca
+[0m
+Estimate transformation[0m
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' --dimensionality 3 --transform 'syn[0.5,3,0]' --metric 'MI[dest_RPI.nii,src.nii,1,32]' --convergence 0 --shrink-factors 1 --smoothing-sigmas 0mm --restrict-deformation 1x1x0 --output '[step0,src_regStep0.nii]' --interpolation 'BSpline[3]' --verbose 1 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-22_register-wrapper_q65wilto
+
+--
+ESTIMATE TRANSFORMATION FOR STEP #1
+
+Apply transformation from previous step
+[93m[1mFile src_reg.nii already exists. Will overwrite it.[0m
+Registration parameters:
+  type ........... im
+  algo ........... rigid
+  slicewise ...... 1
+  metric ......... CC
+  samplStrategy .. None
+  samplPercent ... 0.2
+  iter ........... 10
+  smooth ......... 0
+  laplacian ...... 0
+  shrink ......... 1
+  gradStep ....... 0.5
+  deformation .... 1x1x0
+  init ........... 
+  poly ........... 5
+  filter_size .... 5
+  dof ............ Tx_Ty_Tz_Rx_Ry_Rz
+  smoothWarpXY ... 2
+  rot_method ..... pca
+[0m
+Copy input data to temp folder...[0m
+[0m
+Get image dimensions of destination image...[0m
+[0m  matrix size: 42 x 43 x 17[0m
+[0m  voxel size: 0.8984375mm x 0.8984375mm x 17mm[0m
+[0m
+Split input volume...[0m
+[0m
+Split destination volume...[0m
+
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' -d 2 -t 'SyN[1,1,1]' -c 0 -m 'MI[dest_Z0000.nii,src_Z0000.nii,1,32]' -o warp2d_null -f 1 -s 0 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00000Warp.nii.gz -R dest_Z0000.nii warp2d_null0Warp.nii.gz warp2d_00000GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00000InverseWarp.nii.gz -R src_Z0000.nii warp2d_null0InverseWarp.nii.gz -i warp2d_00000GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' -d 2 -t 'SyN[1,1,1]' -c 0 -m 'MI[dest_Z0001.nii,src_Z0001.nii,1,32]' -o warp2d_null -f 1 -s 0 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00010Warp.nii.gz -R dest_Z0001.nii warp2d_null0Warp.nii.gz warp2d_00010GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00010InverseWarp.nii.gz -R src_Z0001.nii warp2d_null0InverseWarp.nii.gz -i warp2d_00010GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' -d 2 -t 'SyN[1,1,1]' -c 0 -m 'MI[dest_Z0002.nii,src_Z0002.nii,1,32]' -o warp2d_null -f 1 -s 0 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00020Warp.nii.gz -R dest_Z0002.nii warp2d_null0Warp.nii.gz warp2d_00020GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00020InverseWarp.nii.gz -R src_Z0002.nii warp2d_null0InverseWarp.nii.gz -i warp2d_00020GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' -d 2 -t 'SyN[1,1,1]' -c 0 -m 'MI[dest_Z0003.nii,src_Z0003.nii,1,32]' -o warp2d_null -f 1 -s 0 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00030Warp.nii.gz -R dest_Z0003.nii warp2d_null0Warp.nii.gz warp2d_00030GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00030InverseWarp.nii.gz -R src_Z0003.nii warp2d_null0InverseWarp.nii.gz -i warp2d_00030GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' -d 2 -t 'SyN[1,1,1]' -c 0 -m 'MI[dest_Z0004.nii,src_Z0004.nii,1,32]' -o warp2d_null -f 1 -s 0 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00040Warp.nii.gz -R dest_Z0004.nii warp2d_null0Warp.nii.gz warp2d_00040GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00040InverseWarp.nii.gz -R src_Z0004.nii warp2d_null0InverseWarp.nii.gz -i warp2d_00040GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' -d 2 -t 'SyN[1,1,1]' -c 0 -m 'MI[dest_Z0005.nii,src_Z0005.nii,1,32]' -o warp2d_null -f 1 -s 0 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00050Warp.nii.gz -R dest_Z0005.nii warp2d_null0Warp.nii.gz warp2d_00050GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00050InverseWarp.nii.gz -R src_Z0005.nii warp2d_null0InverseWarp.nii.gz -i warp2d_00050GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' -d 2 -t 'SyN[1,1,1]' -c 0 -m 'MI[dest_Z0006.nii,src_Z0006.nii,1,32]' -o warp2d_null -f 1 -s 0 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00060Warp.nii.gz -R dest_Z0006.nii warp2d_null0Warp.nii.gz warp2d_00060GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00060InverseWarp.nii.gz -R src_Z0006.nii warp2d_null0InverseWarp.nii.gz -i warp2d_00060GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' -d 2 -t 'SyN[1,1,1]' -c 0 -m 'MI[dest_Z0007.nii,src_Z0007.nii,1,32]' -o warp2d_null -f 1 -s 0 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00070Warp.nii.gz -R dest_Z0007.nii warp2d_null0Warp.nii.gz warp2d_00070GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00070InverseWarp.nii.gz -R src_Z0007.nii warp2d_null0InverseWarp.nii.gz -i warp2d_00070GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' -d 2 -t 'SyN[1,1,1]' -c 0 -m 'MI[dest_Z0008.nii,src_Z0008.nii,1,32]' -o warp2d_null -f 1 -s 0 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00080Warp.nii.gz -R dest_Z0008.nii warp2d_null0Warp.nii.gz warp2d_00080GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00080InverseWarp.nii.gz -R src_Z0008.nii warp2d_null0InverseWarp.nii.gz -i warp2d_00080GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' -d 2 -t 'SyN[1,1,1]' -c 0 -m 'MI[dest_Z0009.nii,src_Z0009.nii,1,32]' -o warp2d_null -f 1 -s 0 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00090Warp.nii.gz -R dest_Z0009.nii warp2d_null0Warp.nii.gz warp2d_00090GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00090InverseWarp.nii.gz -R src_Z0009.nii warp2d_null0InverseWarp.nii.gz -i warp2d_00090GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' -d 2 -t 'SyN[1,1,1]' -c 0 -m 'MI[dest_Z0010.nii,src_Z0010.nii,1,32]' -o warp2d_null -f 1 -s 0 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00100Warp.nii.gz -R dest_Z0010.nii warp2d_null0Warp.nii.gz warp2d_00100GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00100InverseWarp.nii.gz -R src_Z0010.nii warp2d_null0InverseWarp.nii.gz -i warp2d_00100GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' -d 2 -t 'SyN[1,1,1]' -c 0 -m 'MI[dest_Z0011.nii,src_Z0011.nii,1,32]' -o warp2d_null -f 1 -s 0 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00110Warp.nii.gz -R dest_Z0011.nii warp2d_null0Warp.nii.gz warp2d_00110GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00110InverseWarp.nii.gz -R src_Z0011.nii warp2d_null0InverseWarp.nii.gz -i warp2d_00110GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' -d 2 -t 'SyN[1,1,1]' -c 0 -m 'MI[dest_Z0012.nii,src_Z0012.nii,1,32]' -o warp2d_null -f 1 -s 0 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00120Warp.nii.gz -R dest_Z0012.nii warp2d_null0Warp.nii.gz warp2d_00120GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00120InverseWarp.nii.gz -R src_Z0012.nii warp2d_null0InverseWarp.nii.gz -i warp2d_00120GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' -d 2 -t 'SyN[1,1,1]' -c 0 -m 'MI[dest_Z0013.nii,src_Z0013.nii,1,32]' -o warp2d_null -f 1 -s 0 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00130Warp.nii.gz -R dest_Z0013.nii warp2d_null0Warp.nii.gz warp2d_00130GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00130InverseWarp.nii.gz -R src_Z0013.nii warp2d_null0InverseWarp.nii.gz -i warp2d_00130GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' -d 2 -t 'SyN[1,1,1]' -c 0 -m 'MI[dest_Z0014.nii,src_Z0014.nii,1,32]' -o warp2d_null -f 1 -s 0 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00140Warp.nii.gz -R dest_Z0014.nii warp2d_null0Warp.nii.gz warp2d_00140GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00140InverseWarp.nii.gz -R src_Z0014.nii warp2d_null0InverseWarp.nii.gz -i warp2d_00140GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' -d 2 -t 'SyN[1,1,1]' -c 0 -m 'MI[dest_Z0015.nii,src_Z0015.nii,1,32]' -o warp2d_null -f 1 -s 0 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00150Warp.nii.gz -R dest_Z0015.nii warp2d_null0Warp.nii.gz warp2d_00150GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00150InverseWarp.nii.gz -R src_Z0015.nii warp2d_null0InverseWarp.nii.gz -i warp2d_00150GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' -d 2 -t 'SyN[1,1,1]' -c 0 -m 'MI[dest_Z0016.nii,src_Z0016.nii,1,32]' -o warp2d_null -f 1 -s 0 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00160Warp.nii.gz -R dest_Z0016.nii warp2d_null0Warp.nii.gz warp2d_00160GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00160InverseWarp.nii.gz -R src_Z0016.nii warp2d_null0InverseWarp.nii.gz -i warp2d_00160GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n
+[0m
+Merge warping fields along z...[0m
+[0m
+Move warping fields...[0m
+[0mcp step1Warp.nii.gz C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-22_register-wrapper_q65wilto[0m
+[0mcp step1InverseWarp.nii.gz C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-22_register-wrapper_q65wilto[0m
+[0mrm -rf C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-23_register-slicewise_ig_wq50n[0m
+
+Concatenate transformations...
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 3 warp_src2dest.nii.gz -R dest.nii warp_forward_1.nii.gz warp_forward_0.nii.gz # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-22_register-wrapper_q65wilto
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 3 warp_dest2src.nii.gz -R src.nii warp_inverse_0.nii.gz warp_inverse_1.nii.gz # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-22_register-wrapper_q65wilto
+
+Apply transfo source --> dest...
+[93m[1mFile src_reg.nii already exists. Will overwrite it.[0m
+
+Apply transfo dest --> source...
+[93m[1mFile dest_reg.nii already exists. Will overwrite it.[0m
+
+Generate output files...
+[0mFile created: sub-unf_flip-1_mt-off_MTS_reg.nii.gz[0m
+mv C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-22_register-wrapper_q65wilto\warp_src2dest.nii.gz warp_sub-unf_flip-1_mt-off_MTS2sub-unf_flip-2_mt-off_MTS_crop.nii.gz
+[0mFile created: warp_sub-unf_flip-1_mt-off_MTS2sub-unf_flip-2_mt-off_MTS_crop.nii.gz[0m
+[0mFile created: sub-unf_flip-2_mt-off_MTS_crop_reg.nii.gz[0m
+mv C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-22_register-wrapper_q65wilto\warp_dest2src.nii.gz warp_sub-unf_flip-2_mt-off_MTS_crop2sub-unf_flip-1_mt-off_MTS.nii.gz
+[0mFile created: warp_sub-unf_flip-2_mt-off_MTS_crop2sub-unf_flip-1_mt-off_MTS.nii.gz[0m
+
+Remove temporary files...
+rm -rf C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-22_register-wrapper_q65wilto
+
+Finished! Elapsed time: 12s
+[0m
+*** Generating Quality Control (QC) html report ***[0m
+[0mSuccessfully generated the QC results in E:\phd\courses\qmri\output_N\qc\_json\qc_2026_11_04_233634.564873.json[0m
+
+To see the results in a browser, type:
+start E:\phd\courses\qmri\output_N\qc\index.html
+
+[0mTotal runtime; 13.079 seconds.[0m
++ file_mtoff=sub-unf_flip-1_mt-off_MTS_reg
++ sct_register_multimodal -i sub-unf_flip-1_mt-on_MTS.nii.gz -d sub-unf_flip-2_mt-off_MTS_crop.nii.gz -dseg sub-unf_flip-2_mt-off_MTS_label-SC_seg.nii.gz -param step=1,type=im,algo=rigid,slicewise=1,metric=CC -x spline -qc 'E:\phd\courses\qmri\output_N\qc' -qc-subject sub-unf
+
+--
+Spinal Cord Toolbox (7.3)
+
+sct_register_multimodal -i sub-unf_flip-1_mt-on_MTS.nii.gz -d sub-unf_flip-2_mt-off_MTS_crop.nii.gz -dseg sub-unf_flip-2_mt-off_MTS_label-SC_seg.nii.gz -param step=1,type=im,algo=rigid,slicewise=1,metric=CC -x spline -qc E:\phd\courses\qmri\output_N\qc -qc-subject sub-unf
+--
+
+
+Input parameters:
+  Source .............. sub-unf_flip-1_mt-on_MTS.nii.gz (256, 256, 22)
+  Destination ......... sub-unf_flip-2_mt-off_MTS_crop.nii.gz (42, 43, 17)
+  Init transfo ........ 
+  Mask ................ 
+  Output name ......... 
+  Remove temp files ... 1
+  Verbose ............. 1
+
+Check if input data are 3D...
+
+Copying input data to tmp folder and convert to nii...
+
+--
+ESTIMATE TRANSFORMATION FOR STEP #0
+Registration parameters:
+  type ........... im
+  algo ........... syn
+  slicewise ...... 0
+  metric ......... MI
+  samplStrategy .. None
+  samplPercent ... 0.2
+  iter ........... 0
+  smooth ......... 0
+  laplacian ...... 0
+  shrink ......... 1
+  gradStep ....... 0.5
+  deformation .... 1x1x0
+  init ........... 
+  poly ........... 5
+  filter_size .... 5
+  dof ............ Tx_Ty_Tz_Rx_Ry_Rz
+  smoothWarpXY ... 2
+  rot_method ..... pca
+[0m
+Estimate transformation[0m
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' --dimensionality 3 --transform 'syn[0.5,3,0]' --metric 'MI[dest_RPI.nii,src.nii,1,32]' --convergence 0 --shrink-factors 1 --smoothing-sigmas 0mm --restrict-deformation 1x1x0 --output '[step0,src_regStep0.nii]' --interpolation 'BSpline[3]' --verbose 1 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-37_register-wrapper_rjo_q_5a
+
+--
+ESTIMATE TRANSFORMATION FOR STEP #1
+
+Apply transformation from previous step
+[93m[1mFile src_reg.nii already exists. Will overwrite it.[0m
+Registration parameters:
+  type ........... im
+  algo ........... rigid
+  slicewise ...... 1
+  metric ......... CC
+  samplStrategy .. None
+  samplPercent ... 0.2
+  iter ........... 10
+  smooth ......... 0
+  laplacian ...... 0
+  shrink ......... 1
+  gradStep ....... 0.5
+  deformation .... 1x1x0
+  init ........... 
+  poly ........... 5
+  filter_size .... 5
+  dof ............ Tx_Ty_Tz_Rx_Ry_Rz
+  smoothWarpXY ... 2
+  rot_method ..... pca
+[0m
+Copy input data to temp folder...[0m
+[0m
+Get image dimensions of destination image...[0m
+[0m  matrix size: 42 x 43 x 17[0m
+[0m  voxel size: 0.8984375mm x 0.8984375mm x 17mm[0m
+[0m
+Split input volume...[0m
+[0m
+Split destination volume...[0m
+
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' -d 2 -t 'SyN[1,1,1]' -c 0 -m 'MI[dest_Z0000.nii,src_Z0000.nii,1,32]' -o warp2d_null -f 1 -s 0 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00000Warp.nii.gz -R dest_Z0000.nii warp2d_null0Warp.nii.gz warp2d_00000GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00000InverseWarp.nii.gz -R src_Z0000.nii warp2d_null0InverseWarp.nii.gz -i warp2d_00000GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' -d 2 -t 'SyN[1,1,1]' -c 0 -m 'MI[dest_Z0001.nii,src_Z0001.nii,1,32]' -o warp2d_null -f 1 -s 0 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00010Warp.nii.gz -R dest_Z0001.nii warp2d_null0Warp.nii.gz warp2d_00010GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00010InverseWarp.nii.gz -R src_Z0001.nii warp2d_null0InverseWarp.nii.gz -i warp2d_00010GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' -d 2 -t 'SyN[1,1,1]' -c 0 -m 'MI[dest_Z0002.nii,src_Z0002.nii,1,32]' -o warp2d_null -f 1 -s 0 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00020Warp.nii.gz -R dest_Z0002.nii warp2d_null0Warp.nii.gz warp2d_00020GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00020InverseWarp.nii.gz -R src_Z0002.nii warp2d_null0InverseWarp.nii.gz -i warp2d_00020GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' -d 2 -t 'SyN[1,1,1]' -c 0 -m 'MI[dest_Z0003.nii,src_Z0003.nii,1,32]' -o warp2d_null -f 1 -s 0 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00030Warp.nii.gz -R dest_Z0003.nii warp2d_null0Warp.nii.gz warp2d_00030GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00030InverseWarp.nii.gz -R src_Z0003.nii warp2d_null0InverseWarp.nii.gz -i warp2d_00030GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' -d 2 -t 'SyN[1,1,1]' -c 0 -m 'MI[dest_Z0004.nii,src_Z0004.nii,1,32]' -o warp2d_null -f 1 -s 0 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00040Warp.nii.gz -R dest_Z0004.nii warp2d_null0Warp.nii.gz warp2d_00040GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00040InverseWarp.nii.gz -R src_Z0004.nii warp2d_null0InverseWarp.nii.gz -i warp2d_00040GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' -d 2 -t 'SyN[1,1,1]' -c 0 -m 'MI[dest_Z0005.nii,src_Z0005.nii,1,32]' -o warp2d_null -f 1 -s 0 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00050Warp.nii.gz -R dest_Z0005.nii warp2d_null0Warp.nii.gz warp2d_00050GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00050InverseWarp.nii.gz -R src_Z0005.nii warp2d_null0InverseWarp.nii.gz -i warp2d_00050GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' -d 2 -t 'SyN[1,1,1]' -c 0 -m 'MI[dest_Z0006.nii,src_Z0006.nii,1,32]' -o warp2d_null -f 1 -s 0 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00060Warp.nii.gz -R dest_Z0006.nii warp2d_null0Warp.nii.gz warp2d_00060GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00060InverseWarp.nii.gz -R src_Z0006.nii warp2d_null0InverseWarp.nii.gz -i warp2d_00060GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' -d 2 -t 'SyN[1,1,1]' -c 0 -m 'MI[dest_Z0007.nii,src_Z0007.nii,1,32]' -o warp2d_null -f 1 -s 0 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00070Warp.nii.gz -R dest_Z0007.nii warp2d_null0Warp.nii.gz warp2d_00070GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00070InverseWarp.nii.gz -R src_Z0007.nii warp2d_null0InverseWarp.nii.gz -i warp2d_00070GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' -d 2 -t 'SyN[1,1,1]' -c 0 -m 'MI[dest_Z0008.nii,src_Z0008.nii,1,32]' -o warp2d_null -f 1 -s 0 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00080Warp.nii.gz -R dest_Z0008.nii warp2d_null0Warp.nii.gz warp2d_00080GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00080InverseWarp.nii.gz -R src_Z0008.nii warp2d_null0InverseWarp.nii.gz -i warp2d_00080GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' -d 2 -t 'SyN[1,1,1]' -c 0 -m 'MI[dest_Z0009.nii,src_Z0009.nii,1,32]' -o warp2d_null -f 1 -s 0 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00090Warp.nii.gz -R dest_Z0009.nii warp2d_null0Warp.nii.gz warp2d_00090GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00090InverseWarp.nii.gz -R src_Z0009.nii warp2d_null0InverseWarp.nii.gz -i warp2d_00090GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' -d 2 -t 'SyN[1,1,1]' -c 0 -m 'MI[dest_Z0010.nii,src_Z0010.nii,1,32]' -o warp2d_null -f 1 -s 0 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00100Warp.nii.gz -R dest_Z0010.nii warp2d_null0Warp.nii.gz warp2d_00100GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00100InverseWarp.nii.gz -R src_Z0010.nii warp2d_null0InverseWarp.nii.gz -i warp2d_00100GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' -d 2 -t 'SyN[1,1,1]' -c 0 -m 'MI[dest_Z0011.nii,src_Z0011.nii,1,32]' -o warp2d_null -f 1 -s 0 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00110Warp.nii.gz -R dest_Z0011.nii warp2d_null0Warp.nii.gz warp2d_00110GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00110InverseWarp.nii.gz -R src_Z0011.nii warp2d_null0InverseWarp.nii.gz -i warp2d_00110GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' -d 2 -t 'SyN[1,1,1]' -c 0 -m 'MI[dest_Z0012.nii,src_Z0012.nii,1,32]' -o warp2d_null -f 1 -s 0 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00120Warp.nii.gz -R dest_Z0012.nii warp2d_null0Warp.nii.gz warp2d_00120GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00120InverseWarp.nii.gz -R src_Z0012.nii warp2d_null0InverseWarp.nii.gz -i warp2d_00120GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' -d 2 -t 'SyN[1,1,1]' -c 0 -m 'MI[dest_Z0013.nii,src_Z0013.nii,1,32]' -o warp2d_null -f 1 -s 0 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00130Warp.nii.gz -R dest_Z0013.nii warp2d_null0Warp.nii.gz warp2d_00130GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00130InverseWarp.nii.gz -R src_Z0013.nii warp2d_null0InverseWarp.nii.gz -i warp2d_00130GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' -d 2 -t 'SyN[1,1,1]' -c 0 -m 'MI[dest_Z0014.nii,src_Z0014.nii,1,32]' -o warp2d_null -f 1 -s 0 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00140Warp.nii.gz -R dest_Z0014.nii warp2d_null0Warp.nii.gz warp2d_00140GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00140InverseWarp.nii.gz -R src_Z0014.nii warp2d_null0InverseWarp.nii.gz -i warp2d_00140GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' -d 2 -t 'SyN[1,1,1]' -c 0 -m 'MI[dest_Z0015.nii,src_Z0015.nii,1,32]' -o warp2d_null -f 1 -s 0 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00150Warp.nii.gz -R dest_Z0015.nii warp2d_null0Warp.nii.gz warp2d_00150GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00150InverseWarp.nii.gz -R src_Z0015.nii warp2d_null0InverseWarp.nii.gz -i warp2d_00150GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' -d 2 -t 'SyN[1,1,1]' -c 0 -m 'MI[dest_Z0016.nii,src_Z0016.nii,1,32]' -o warp2d_null -f 1 -s 0 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00160Warp.nii.gz -R dest_Z0016.nii warp2d_null0Warp.nii.gz warp2d_00160GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 2 warp2d_00160InverseWarp.nii.gz -R src_Z0016.nii warp2d_null0InverseWarp.nii.gz -i warp2d_00160GenericAffine.mat # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul
+[0m
+Merge warping fields along z...[0m
+[0m
+Move warping fields...[0m
+[0mcp step1Warp.nii.gz C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-37_register-wrapper_rjo_q_5a[0m
+[0mcp step1InverseWarp.nii.gz C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-37_register-wrapper_rjo_q_5a[0m
+[0mrm -rf C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-38_register-slicewise_p_0v2vul[0m
+
+Concatenate transformations...
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 3 warp_src2dest.nii.gz -R dest.nii warp_forward_1.nii.gz warp_forward_0.nii.gz # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-37_register-wrapper_rjo_q_5a
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 3 warp_dest2src.nii.gz -R src.nii warp_inverse_0.nii.gz warp_inverse_1.nii.gz # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-37_register-wrapper_rjo_q_5a
+
+Apply transfo source --> dest...
+[93m[1mFile src_reg.nii already exists. Will overwrite it.[0m
+
+Apply transfo dest --> source...
+[93m[1mFile dest_reg.nii already exists. Will overwrite it.[0m
+
+Generate output files...
+[0mFile created: sub-unf_flip-1_mt-on_MTS_reg.nii.gz[0m
+mv C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-37_register-wrapper_rjo_q_5a\warp_src2dest.nii.gz warp_sub-unf_flip-1_mt-on_MTS2sub-unf_flip-2_mt-off_MTS_crop.nii.gz
+[0mFile created: warp_sub-unf_flip-1_mt-on_MTS2sub-unf_flip-2_mt-off_MTS_crop.nii.gz[0m
+[93m[1mFile sub-unf_flip-2_mt-off_MTS_crop_reg.nii.gz already exists. Deleting it..[0m
+[0mFile created: sub-unf_flip-2_mt-off_MTS_crop_reg.nii.gz[0m
+mv C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-37_register-wrapper_rjo_q_5a\warp_dest2src.nii.gz warp_sub-unf_flip-2_mt-off_MTS_crop2sub-unf_flip-1_mt-on_MTS.nii.gz
+[0mFile created: warp_sub-unf_flip-2_mt-off_MTS_crop2sub-unf_flip-1_mt-on_MTS.nii.gz[0m
+
+Remove temporary files...
+rm -rf C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-37_register-wrapper_rjo_q_5a
+
+Finished! Elapsed time: 13s
+[0m
+*** Generating Quality Control (QC) html report ***[0m
+[0mSuccessfully generated the QC results in E:\phd\courses\qmri\output_N\qc\_json\qc_2026_11_04_233649.739173.json[0m
+
+To see the results in a browser, type:
+start E:\phd\courses\qmri\output_N\qc\index.html
+
+[0mTotal runtime; 13.526 seconds.[0m
++ file_mton=sub-unf_flip-1_mt-on_MTS_reg
++ cp sub-unf_flip-2_mt-off_MTS.json sub-unf_flip-2_mt-off_MTS_crop.json
++ cp sub-unf_flip-1_mt-off_MTS.json sub-unf_flip-1_mt-off_MTS_reg.json
++ cp sub-unf_flip-1_mt-on_MTS.json sub-unf_flip-1_mt-on_MTS_reg.json
++ sct_register_multimodal -i 'C:\Users\beyza\sct_7.3/data/PAM50/template/PAM50_t1.nii.gz' -iseg 'C:\Users\beyza\sct_7.3/data/PAM50/template/PAM50_cord.nii.gz' -d sub-unf_flip-2_mt-off_MTS_crop.nii.gz -dseg sub-unf_flip-2_mt-off_MTS_label-SC_seg.nii.gz -param step=1,type=seg,algo=slicereg,metric=MeanSquares,smooth=2:step=2,type=im,algo=syn,metric=CC,iter=5,gradStep=0.5 -initwarp warp_template2T1w.nii.gz -initwarpinv warp_T1w2template.nii.gz
+
+--
+Spinal Cord Toolbox (7.3)
+
+sct_register_multimodal -i C:\Users\beyza\sct_7.3/data/PAM50/template/PAM50_t1.nii.gz -iseg C:\Users\beyza\sct_7.3/data/PAM50/template/PAM50_cord.nii.gz -d sub-unf_flip-2_mt-off_MTS_crop.nii.gz -dseg sub-unf_flip-2_mt-off_MTS_label-SC_seg.nii.gz -param step=1,type=seg,algo=slicereg,metric=MeanSquares,smooth=2:step=2,type=im,algo=syn,metric=CC,iter=5,gradStep=0.5 -initwarp warp_template2T1w.nii.gz -initwarpinv warp_T1w2template.nii.gz
+--
+
+
+Input parameters:
+  Source .............. C:\Users\beyza\sct_7.3/data/PAM50/template/PAM50_t1.nii.gz (141, 141, 991)
+  Destination ......... sub-unf_flip-2_mt-off_MTS_crop.nii.gz (42, 43, 17)
+  Init transfo ........ E:\phd\courses\qmri\output_N\data_processed\sub-unf\anat\warp_template2T1w.nii.gz
+  Mask ................ 
+  Output name ......... 
+  Remove temp files ... 1
+  Verbose ............. 1
+
+Check if input data are 3D...
+
+Copying input data to tmp folder and convert to nii...
+
+Skip step=0 and replace with initial transformations: 
+  E:\phd\courses\qmri\output_N\data_processed\sub-unf\anat\warp_template2T1w.nii.gz
+
+--
+ESTIMATE TRANSFORMATION FOR STEP #1
+
+Apply transformation from previous step
+Last transformation is not affine.
+[93m[1mFile src_seg_reg.nii already exists. Will overwrite it.[0m
+Registration parameters:
+  type ........... seg
+  algo ........... slicereg
+  slicewise ...... 0
+  metric ......... MeanSquares
+  samplStrategy .. None
+  samplPercent ... 0.2
+  iter ........... 10
+  smooth ......... 2
+  laplacian ...... 0
+  shrink ......... 1
+  gradStep ....... 0.5
+  deformation .... 1x1x0
+  init ........... 
+  poly ........... 5
+  filter_size .... 5
+  dof ............ Tx_Ty_Tz_Rx_Ry_Rz
+  smoothWarpXY ... 2
+  rot_method ..... pca
+'C:\Users\beyza\sct_7.3\bin\isct_antsSliceRegularizedRegistration' -t 'Translation[0.5]' -m 'MeanSquares[dest_seg_RPI_crop.nii,src_seg_reg_crop.nii,1,4,None,0.2]' -p 5 -i 10 -f 1 -s 2 -v 1 -o '[step1,src_seg_reg_crop_regStep1.nii]' # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-53_register-wrapper_2fkjctmz
+
+--
+ESTIMATE TRANSFORMATION FOR STEP #2
+
+Apply transformation from previous step
+[93m[1mFile src_reg.nii already exists. Will overwrite it.[0m
+Registration parameters:
+  type ........... im
+  algo ........... syn
+  slicewise ...... 0
+  metric ......... CC
+  samplStrategy .. None
+  samplPercent ... 0.2
+  iter ........... 5
+  smooth ......... 0
+  laplacian ...... 0
+  shrink ......... 1
+  gradStep ....... 0.5
+  deformation .... 1x1x0
+  init ........... 
+  poly ........... 5
+  filter_size .... 5
+  dof ............ Tx_Ty_Tz_Rx_Ry_Rz
+  smoothWarpXY ... 2
+  rot_method ..... pca
+[0m
+Estimate transformation[0m
+'C:\Users\beyza\sct_7.3\bin\isct_antsRegistration' --dimensionality 3 --transform 'syn[0.5,3,0]' --metric 'CC[dest_RPI_pad.nii,src_reg.nii,1,4]' --convergence 5 --shrink-factors 1 --smoothing-sigmas 0mm --restrict-deformation 1x1x0 --output '[step2,src_reg_regStep2.nii]' --interpolation 'BSpline[3]' --verbose 1 # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-53_register-wrapper_2fkjctmz
+
+Concatenate transformations...
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 3 warp_src2dest.nii.gz -R dest.nii warp_forward_2.nii.gz warp_forward_1.nii.gz 'E:\phd\courses\qmri\output_N\data_processed\sub-unf\anat\warp_template2T1w.nii.gz' # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-53_register-wrapper_2fkjctmz
+'C:\Users\beyza\sct_7.3\bin\isct_ComposeMultiTransform' 3 warp_dest2src.nii.gz -R src.nii 'E:\phd\courses\qmri\output_N\data_processed\sub-unf\anat\warp_T1w2template.nii.gz' warp_inverse_1.nii.gz warp_inverse_2.nii.gz # in C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-53_register-wrapper_2fkjctmz
+
+Apply transfo source --> dest...
+[93m[1mFile src_reg.nii already exists. Will overwrite it.[0m
+
+Apply transfo dest --> source...
+[93m[1mFile dest_reg.nii already exists. Will overwrite it.[0m
+
+Generate output files...
+[0mFile created: PAM50_t1_reg.nii.gz[0m
+mv C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-53_register-wrapper_2fkjctmz\warp_src2dest.nii.gz warp_PAM50_t12sub-unf_flip-2_mt-off_MTS_crop.nii.gz
+[0mFile created: warp_PAM50_t12sub-unf_flip-2_mt-off_MTS_crop.nii.gz[0m
+[93m[1mFile sub-unf_flip-2_mt-off_MTS_crop_reg.nii.gz already exists. Deleting it..[0m
+[0mFile created: sub-unf_flip-2_mt-off_MTS_crop_reg.nii.gz[0m
+mv C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-53_register-wrapper_2fkjctmz\warp_dest2src.nii.gz warp_sub-unf_flip-2_mt-off_MTS_crop2PAM50_t1.nii.gz
+[0mFile created: warp_sub-unf_flip-2_mt-off_MTS_crop2PAM50_t1.nii.gz[0m
+
+Remove temporary files...
+rm -rf C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-36-53_register-wrapper_2fkjctmz
+
+Finished! Elapsed time: 61s
+[0mTotal runtime; 60.985 seconds.[0m
++ mv warp_PAM50_t12sub-unf_flip-2_mt-off_MTS_crop.nii.gz warp_template2axT1w.nii.gz
++ mv warp_sub-unf_flip-2_mt-off_MTS_crop2PAM50_t1.nii.gz warp_axT1w2template.nii.gz
++ sct_warp_template -d sub-unf_flip-2_mt-off_MTS_crop.nii.gz -w warp_template2axT1w.nii.gz -ofolder label_axT1w -qc 'E:\phd\courses\qmri\output_N\qc' -qc-subject sub-unf
+
+--
+Spinal Cord Toolbox (7.3)
+
+sct_warp_template -d sub-unf_flip-2_mt-off_MTS_crop.nii.gz -w warp_template2axT1w.nii.gz -ofolder label_axT1w -qc E:\phd\courses\qmri\output_N\qc -qc-subject sub-unf
+--
+
+
+Check parameters:
+  Working directory ........ E:\phd\courses\qmri\output_N\data_processed\sub-unf\anat
+  Destination image ........ sub-unf_flip-2_mt-off_MTS_crop.nii.gz
+  Warping field ............ warp_template2axT1w.nii.gz
+  Path template ............ C:\Users\beyza\sct_7.3\data\PAM50
+  Output folder ............ label_axT1w
+
+
+WARP TEMPLATE:
+[93m[1mFile label_axT1w\template\PAM50_t1.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\template\PAM50_t2.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\template\PAM50_t2s.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\template\PAM50_cord.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\template\PAM50_wm.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\template\PAM50_gm.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\template\PAM50_csf.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\template\PAM50_levels.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\template\PAM50_levels_continuous.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\template\PAM50_label_body.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\template\PAM50_label_disc.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\template\PAM50_label_discPosterior.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\template\PAM50_spine.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\template\PAM50_centerline.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\template\PAM50_spinal_midpoint.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\template\PAM50_spinal_levels.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\template\PAM50_rootlets.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\template\PAM50_rootlets_midpoint.nii.gz already exists. Will overwrite it.[0m
+cp C:\Users\beyza\sct_7.3\data\PAM50\template\info_label.txt label_axT1w\template
+
+WARP ATLAS OF WHITE MATTER TRACTS:
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_00.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_01.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_02.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_03.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_04.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_05.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_06.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_07.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_08.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_09.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_10.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_11.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_12.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_13.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_14.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_15.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_16.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_17.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_18.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_19.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_20.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_21.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_22.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_23.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_24.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_25.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_26.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_27.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_28.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_29.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_30.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_31.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_32.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_33.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_34.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_35.nii.gz already exists. Will overwrite it.[0m
+[93m[1mFile label_axT1w\atlas\PAM50_atlas_36.nii.gz already exists. Will overwrite it.[0m
+cp C:\Users\beyza\sct_7.3\data\PAM50\atlas\info_label.txt label_axT1w\atlas
+[0mResampling image "sub-unf_flip-2_mt-off_MTS_crop.nii.gz" to 0.6x0.6 mm[0m
+[0mResampling image "PAM50_wm.nii.gz" to 0.6x0.6 mm[0m
+[0mCompute center of mass at each slice[0m
+[0m
+*** Generating Quality Control (QC) html report ***[0m
+[0mE:\phd\courses\qmri\output_N\qc\data_processed\sub-unf\anat\sct_warp_template\2026_11_04_233844.565892\background_img.png[0m
+[0mSuccessfully generated the QC results in E:\phd\courses\qmri\output_N\qc\_json\qc_2026_11_04_233844.565892.json[0m
+
+To see the results in a browser, type:
+start E:\phd\courses\qmri\output_N\qc\index.html
+
+[0mTotal runtime; 50.181 seconds.[0m
++ sct_compute_mtr -mt0 sub-unf_flip-1_mt-off_MTS_reg.nii.gz -mt1 sub-unf_flip-1_mt-on_MTS_reg.nii.gz
+
+--
+Spinal Cord Toolbox (7.3)
+
+sct_compute_mtr -mt0 sub-unf_flip-1_mt-off_MTS_reg.nii.gz -mt1 sub-unf_flip-1_mt-on_MTS_reg.nii.gz
+--
+
+
+Compute MTR...
+[0mFound 0 voxels with value=0. These will be replaced by nan.[0m
+[0mThreshold to clip values: +/- 100[0m
+[0mTotal runtime; 0.380 seconds.[0m
++ sct_compute_mtsat -mt sub-unf_flip-1_mt-on_MTS_reg.nii.gz -pd sub-unf_flip-1_mt-off_MTS_reg.nii.gz -t1 sub-unf_flip-2_mt-off_MTS_crop.nii.gz
+
+--
+Spinal Cord Toolbox (7.3)
+
+sct_compute_mtsat -mt sub-unf_flip-1_mt-on_MTS_reg.nii.gz -pd sub-unf_flip-1_mt-off_MTS_reg.nii.gz -t1 sub-unf_flip-2_mt-off_MTS_crop.nii.gz
+--
+
+Load data...
+[0mCompute T1 map...[0m
+[93m[1mR1 values were found to be lower than 0.01. They will be set to inf, producing T1=0 for these voxels.[0m
+[0mCompute A...[0m
+[0mCompute MTsat...[0m
+[93m[1mMTsat values were found to be larger than 1. They will be set to zero for these voxels.[0m
+Generate output files...
+[0mTotal runtime; 0.408 seconds.[0m
++ sct_extract_metric -i mtr.nii.gz -f label_axT1w/atlas -l 51 -vert 2:5 -vertfile label_axT1w/template/PAM50_levels.nii.gz -o 'E:\phd\courses\qmri\output_N\results/MTR.csv' -append 1
+
+--
+Spinal Cord Toolbox (7.3)
+
+sct_extract_metric -i mtr.nii.gz -f label_axT1w/atlas -l 51 -vert 2:5 -vertfile label_axT1w/template/PAM50_levels.nii.gz -o E:\phd\courses\qmri\output_N\results/MTR.csv -append 1
+--
+
+
+Load metric image...
+Estimation for label: white matter
+
+Remove temporary files...
+rm -rf C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-38-51_optic-detect-centerline_oyy9t5ij
+
+Done! To view results, type:
+start E:\phd\courses\qmri\output_N\results/MTR.csv
+
+[0mTotal runtime; 0.810 seconds.[0m
++ sct_extract_metric -i mtsat.nii.gz -f label_axT1w/atlas -l 51 -vert 2:5 -vertfile label_axT1w/template/PAM50_levels.nii.gz -o 'E:\phd\courses\qmri\output_N\results/MTsat.csv' -append 1
+
+--
+Spinal Cord Toolbox (7.3)
+
+sct_extract_metric -i mtsat.nii.gz -f label_axT1w/atlas -l 51 -vert 2:5 -vertfile label_axT1w/template/PAM50_levels.nii.gz -o E:\phd\courses\qmri\output_N\results/MTsat.csv -append 1
+--
+
+
+Load metric image...
+Estimation for label: white matter
+
+Remove temporary files...
+rm -rf C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-38-53_optic-detect-centerline_6rjmzam9
+
+Done! To view results, type:
+start E:\phd\courses\qmri\output_N\results/MTsat.csv
+
+[0mTotal runtime; 0.851 seconds.[0m
++ sct_extract_metric -i t1map.nii.gz -f label_axT1w/atlas -l 51 -vert 2:5 -vertfile label_axT1w/template/PAM50_levels.nii.gz -o 'E:\phd\courses\qmri\output_N\results/T1.csv' -append 1
+
+--
+Spinal Cord Toolbox (7.3)
+
+sct_extract_metric -i t1map.nii.gz -f label_axT1w/atlas -l 51 -vert 2:5 -vertfile label_axT1w/template/PAM50_levels.nii.gz -o E:\phd\courses\qmri\output_N\results/T1.csv -append 1
+--
+
+
+Load metric image...
+Estimation for label: white matter
+
+Remove temporary files...
+rm -rf C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-38-55_optic-detect-centerline_ytnmbn2s
+
+Done! To view results, type:
+start E:\phd\courses\qmri\output_N\results/T1.csv
+
+[0mTotal runtime; 0.735 seconds.[0m
++ sct_extract_metric -i mtr.nii.gz -f label_axT1w/atlas -l 2,17 -vert 2:5 -vertfile label_axT1w/template/PAM50_levels.nii.gz -o 'E:\phd\courses\qmri\output_N\results/MTR_LCST.csv' -append 1 -combine 1
+
+--
+Spinal Cord Toolbox (7.3)
+
+sct_extract_metric -i mtr.nii.gz -f label_axT1w/atlas -l 2,17 -vert 2:5 -vertfile label_axT1w/template/PAM50_levels.nii.gz -o E:\phd\courses\qmri\output_N\results/MTR_LCST.csv -append 1 -combine 1
+--
+
+
+Load metric image...
+Estimation for label: 2,17
+
+Remove temporary files...
+rm -rf C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-38-58_optic-detect-centerline_n2v5mo_1
+
+Done! To view results, type:
+start E:\phd\courses\qmri\output_N\results/MTR_LCST.csv
+
+[0mTotal runtime; 0.714 seconds.[0m
++ sct_extract_metric -i mtr.nii.gz -f label_axT1w/atlas -l 0,1,15,16 -vert 2:5 -vertfile label_axT1w/template/PAM50_levels.nii.gz -o 'E:\phd\courses\qmri\output_N\results/MTR_DC.csv' -append 1 -combine 1
+
+--
+Spinal Cord Toolbox (7.3)
+
+sct_extract_metric -i mtr.nii.gz -f label_axT1w/atlas -l 0,1,15,16 -vert 2:5 -vertfile label_axT1w/template/PAM50_levels.nii.gz -o E:\phd\courses\qmri\output_N\results/MTR_DC.csv -append 1 -combine 1
+--
+
+
+Load metric image...
+Estimation for label: 0,1,15,16
+
+Remove temporary files...
+rm -rf C:\Users\beyza\AppData\Local\Temp\sct_2026-11-04_23-39-00_optic-detect-centerline_pst0wyf9
+
+Done! To view results, type:
+start E:\phd\courses\qmri\output_N\results/MTR_DC.csv
+
+[0mTotal runtime; 0.821 seconds.[0m
++ cd ..
++ FILES_TO_CHECK=("anat/${SUBJECT}_T1w_label-SC_seg.nii.gz" "anat/label_axT1w/template/PAM50_levels.nii.gz" "anat/mtr.nii.gz" "anat/mtsat.nii.gz" "anat/t1map.nii.gz")
++ for file in ${FILES_TO_CHECK[@]}
++ [[ ! -e anat/sub-unf_T1w_label-SC_seg.nii.gz ]]
++ for file in ${FILES_TO_CHECK[@]}
++ [[ ! -e anat/label_axT1w/template/PAM50_levels.nii.gz ]]
++ for file in ${FILES_TO_CHECK[@]}
++ [[ ! -e anat/mtr.nii.gz ]]
++ for file in ${FILES_TO_CHECK[@]}
++ [[ ! -e anat/mtsat.nii.gz ]]
++ for file in ${FILES_TO_CHECK[@]}
++ [[ ! -e anat/t1map.nii.gz ]]
+++ date +%s
++ end=1793831941
++ runtime=828
++ echo
+
++ echo '~~~'
+~~~
+++ sct_version
++ echo 'SCT version: 7.3'
+SCT version: 7.3
+++ uname -nsr
++ echo 'Ran on:      MINGW64_NT-10.0-26200 LAPTOP-AAG5339S 3.6.10-5a1665c8.x86_64'
+Ran on:      MINGW64_NT-10.0-26200 LAPTOP-AAG5339S 3.6.10-5a1665c8.x86_64
++ echo 'Duration:    0hrs 13min 48sec'
+Duration:    0hrs 13min 48sec
++ echo '~~~'
+~~~

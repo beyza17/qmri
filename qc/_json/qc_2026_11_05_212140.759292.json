@@ -1,0 +1,16 @@
+{
+ "path": "E:\\phd\\courses\\qmri\\output_N\\data_processed\\sub-unf\\anat",
+ "cmdline": "sct_label_vertebrae -i sub-unf_T1w.nii.gz -s label_T1w/template/PAM50_levels.nii.gz -p sct_label_vertebrae -qc 'E:\\phd\\courses\\qmri\\output_N\\qc' -qc-subject sub-unf",
+ "command": "sct_label_vertebrae",
+ "sctVersion": "7.3",
+ "dataset": "data_processed",
+ "subject": "sub-unf",
+ "contrast": "anat",
+ "inputFile": "sub-unf_T1w.nii.gz",
+ "plane": "Sagittal",
+ "backgroundImage": "data_processed\\sub-unf\\anat\\sct_label_vertebrae\\2026_11_05_212140.759292\\background_img.png",
+ "overlayImage": "data_processed\\sub-unf\\anat\\sct_label_vertebrae\\2026_11_05_212140.759292\\overlay_img.png",
+ "date": "2026-11-05 21:21:40.759292",
+ "rank": "",
+ "qc": ""
+}

@@ -1,0 +1,62 @@
+
+--
+Spinal Cord Toolbox (7.3)
+
+INFO SYSTEM
+-----------
+OS: windows (Windows-10-10.0.26200-SP0)
+CPU cores: Available: 8 | Threads used by ITK Programs: 1
+RAM: Total 16225 MB | Available 1603 MB | Used 14621 MB
+
+INPUT ARGUMENTS
+---------------
+batch_log: sct_run_batch_log.txt
+config: null
+continue_on_error: 1
+email_from: null
+email_host: smtp.gmail.com:587
+email_to: null
+exclude: null
+exclude_list: null
+exclude_yml: null
+ignore_ses: false
+include: null
+include_list:
+- sub-unf
+include_yml: null
+itk_threads: 1
+jobs: 1
+path_data: E:/phd/courses/qmri/data-single-subject
+path_output: E:/phd/courses/qmri/output_N
+path_segmanual: .
+script: process_data_mt_B.sh
+script_args: ''
+subject_prefix: sub-
+v: 1
+zip: false
+
+SCRIPT
+------
+git commit: ?!?
+git origin: ?!?
+Copying script to output folder...
+E:\phd\courses\qmri\GBM8360E_Lab4_scripts\lab4_scripts\process_data_mt_B.sh -> E:\phd\courses\qmri\output_N\process_data_mt_B.sh
+Setting execute permissions for script file process_data_mt_B.sh ...
+
+DATA
+----
+git commit: ?!?
+git origin: ?!?
+
+RUNNING
+-------
+Processing 1 subjects in total. (Number of subjects processed in parallel: 1).
+
+Hooray! your batch completed successfully :-)
+
+Started: 2026-11-05 21h12m42s | Ended: 21h27m36s | Duration: 00h14m54s
+
+
+To open the Quality Control (QC) report in a web-browser, type:
+start E:\phd\courses\qmri\output_N\qc\index.html
+

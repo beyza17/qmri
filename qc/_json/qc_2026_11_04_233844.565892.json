@@ -1,0 +1,16 @@
+{
+ "path": "E:\\phd\\courses\\qmri\\output_N\\data_processed\\sub-unf\\anat",
+ "cmdline": "sct_warp_template -d sub-unf_flip-2_mt-off_MTS_crop.nii.gz -w warp_template2axT1w.nii.gz -ofolder label_axT1w -qc 'E:\\phd\\courses\\qmri\\output_N\\qc' -qc-subject sub-unf",
+ "command": "sct_warp_template",
+ "sctVersion": "7.3",
+ "dataset": "data_processed",
+ "subject": "sub-unf",
+ "contrast": "anat",
+ "inputFile": "sub-unf_flip-2_mt-off_MTS_crop.nii.gz",
+ "plane": "Axial",
+ "backgroundImage": "data_processed\\sub-unf\\anat\\sct_warp_template\\2026_11_04_233844.565892\\background_img.png",
+ "overlayImage": "data_processed\\sub-unf\\anat\\sct_warp_template\\2026_11_04_233844.565892\\overlay_img.png",
+ "date": "2026-11-04 23:38:44.565892",
+ "rank": "",
+ "qc": ""
+}
